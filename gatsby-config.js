@@ -9,10 +9,10 @@ const shouldAnalyseBundle = process.env.ANALYSE_BUNDLE
 module.exports = {
   siteMetadata: {
     siteTitle: `tfeuerbach.dev`,
-    siteTitleAlt: `tfeuerbach.dev`,
+    siteTitleAlt: `tfeuerbach - Personal Site`,
     siteHeadline: `Thomas Feuerbach's Blog`,
     siteUrl: `https://tfeuerbach.dev`,
-    siteDescription: `Project/fun personal website for whatever I feel like.`,
+    siteDescription: `Thomas Feuerbach's personal website for programming, projects, and interesting things.`,
     siteImage: `/banner.jpg`,
     author: `Thomas Feuerbach`,
   },
@@ -29,9 +29,13 @@ module.exports = {
             slug: `/blog`,
           },
           {
+            title: `Résumé`,
+            slug: `/resume`,
+          },
+          {
             title: `About`,
             slug: `/about`,
-          },
+          }
         ],
         externalLinks: [
           {
@@ -54,9 +58,9 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `minimal-blog - @lekoarts/gatsby-theme-minimal-blog`,
-        short_name: `minimal-blog`,
-        description: `Typography driven, feature-rich blogging theme with minimal aesthetics. Includes tags/categories support and extensive features for code blocks such as live preview, line numbers, and code highlighting.`,
+        name: `tfeuerbach - Thomas Feuerbach's Personal Page`,
+        short_name: `tfeuerbach`,
+        description: `Thomas Feuerbach's personal website for programming, projects, and interesting things.`,
         start_url: `/`,
         background_color: `#fff`,
         // This will impact how browsers show your PWA/website
@@ -131,6 +135,18 @@ module.exports = {
         reportFilename: `_bundle.html`,
         openAnalyzer: false,
       },
+      /*resolve: `gatsby-plugin-google-gtag`,  <---- add in google analytics
+      options: {
+        // You can add multiple tracking ids and a pageview event will be fired for all of them.
+        trackingIds: [
+          "SOME_ID", // Google Analytics
+        ],
+        // This object is used for configuration specific to this plugin
+        pluginConfig: {
+          // Puts tracking script in the head instead of the body
+          head: true,
+        },
+      }, */
     },
   ].filter(Boolean),
 }
