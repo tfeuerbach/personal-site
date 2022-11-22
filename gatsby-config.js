@@ -8,9 +8,9 @@ const shouldAnalyseBundle = process.env.ANALYSE_BUNDLE
 
 module.exports = {
   siteMetadata: {
-    siteTitle: `tfeuerbach`,
-    siteTitleAlt: `tfeuerbach`,
-    siteHeadline: `tfeuerbach`,
+    siteTitle: `tfeuerbach.dev`,
+    siteTitleAlt: `tfeuerbach.dev`,
+    siteHeadline: `Thomas Feuerbach's Blog`,
     siteUrl: `https://tfeuerbach.dev`,
     siteDescription: `Project/fun personal website for whatever I feel like.`,
     siteImage: `/banner.jpg`,
@@ -35,12 +35,12 @@ module.exports = {
         ],
         externalLinks: [
           {
-            name: `Twitter`,
-            url: `https://twitter.com/lekoarts_de`,
+            name: `LinkedIn`,
+            url: `https://linkedin.com/in/tfeuerbach`,
           },
           {
-            name: `Homepage`,
-            url: `https://www.lekoarts.de?utm_source=minimal-blog&utm_medium=Starter`,
+            name: `YouTube`,
+            url: `https://youtube.com/@tfeuerbach`,
           },
         ],
       },
