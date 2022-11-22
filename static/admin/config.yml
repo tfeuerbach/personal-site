@@ -9,10 +9,10 @@ publish_mode: editorial_workflow
 collections:
   - name: "blog"
     label: "Blog"
-    folder: "content/blog"
-    path: "{{slug}}"
+    folder: "content/posts"
+    path: "{{slug}}/index"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{slug}} - {{year}}-{{month}}-{{day}}"
     fields:
       - {label: "Layout", name: "layout", widget: "hidden", default: "blog"}
       - {label: "Title", name: "title", widget: "string"}
