@@ -26,7 +26,7 @@ const Footer = () => {
       <div>
         <Link
           aria-label="Link to the theme's GitHub repository"
-          href="https://github.com/tfeuerbach/personal_website"
+          href="https://github.com/tfeuerbach/personal_site"
         >
           GitHub
         </Link>
