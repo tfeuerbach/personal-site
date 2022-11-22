@@ -12,7 +12,7 @@ collections:
     folder: "content/posts"
     path: "{{slug}}"
     create: true
-    slug: "{{slug}}:{{year}}-{{month}}-{{day}}"
+    slug: "{{slug}}-{{year}}-{{month}}-{{day}}"
     fields:
       - {label: "Layout", name: "layout", widget: "hidden", default: "blog"}
       - {label: "Title", name: "title", widget: "string"}
