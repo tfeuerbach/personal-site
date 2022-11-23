@@ -29,7 +29,7 @@ module.exports = {
             slug: `/blog`,
           },
           {
-            title: `Résumé`,
+            title: `Resume`,
             slug: `/resume`,
           },
           {
