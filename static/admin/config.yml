@@ -2,8 +2,6 @@ backend:
   name: github
   repo: tfeuerbach/personal-site
   branch: main
-  base_url: https://tfeuerbach.netlify.app
-  auth_endpoint: /auth
 
 media_folder: "images/uploads"
 
