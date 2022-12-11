@@ -23,6 +23,7 @@ module.exports = {
       resolve: `@lekoarts/gatsby-theme-minimal-blog`,
       // See the theme's README for all available options
       options: {
+        modulePath: `${__dirname}/src/cms/cms.js`,
         navigation: [
           {
             title: `Posts`,
@@ -48,6 +49,12 @@ module.exports = {
           },
         ],
       },
+    },
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        footnotes: true
+      }
     },
     {
       resolve: `gatsby-plugin-sitemap`,

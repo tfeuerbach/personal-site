@@ -8,13 +8,14 @@ media_folder: "images/uploads"
 publish_mode: editorial_workflow
 
 collections:
-  - name: "blog"
-    label: "Blog"
+  - name: "posts"
+    label: "Posts"
     folder: "content/posts"
     create: true
     slug: "{{slug}}-{{year}}-{{month}}-{{day}}"
     fields:
-      - {label: "Layout", name: "layout", widget: "hidden", default: "blog"}
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Image", name: "image", required: false, widget: "image"}
       - {label: "Body", name: "body", widget: "markdown"}
+      - {label: "Tags", name: "tags", widget: "list"}
