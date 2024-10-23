@@ -1,20 +1,19 @@
-import * as React from "react";
-import { useColorMode } from "theme-ui";
-import { Highlight } from "prism-react-renderer"; // No more defaultProps
-import { calculateLinesToHighlight, getLanguage, GetLanguageInput } from "@lekoarts/themes-utils";
-// import lightTheme from "prism-react-renderer/themes/github"; // Updated theme import
-import { themes } from 'prism-react-renderer';
-// import darkTheme from "prism-react-renderer/themes/vsDark"; // Updated theme import
-import Copy from "./copy";
-import useMinimalBlogConfig from "../hooks/use-minimal-blog-config";
+import * as React from "react"
+import { useColorMode } from "theme-ui"
+import { Highlight } from "prism-react-renderer"
+import { calculateLinesToHighlight, getLanguage, GetLanguageInput } from "@lekoarts/themes-utils"
+import lightTheme from "prism-react-renderer/themes/github"
+import darkTheme from "prism-react-renderer/themes/vsDark"
+import Copy from "./copy"
+import useMinimalBlogConfig from "../hooks/use-minimal-blog-config"
 
 type CodeProps = {
-  codeString: string;
-  withLineNumbers?: boolean;
-  highlight?: string;
-  title?: string;
-  className: GetLanguageInput;
-};
+  codeString: string
+  withLineNumbers?: boolean
+  highlight?: string
+  title?: string
+  className: GetLanguageInput
+}
 
 const Code = ({
   codeString,
@@ -23,18 +22,17 @@ const Code = ({
   className: blockClassName,
   highlight = ``,
 }: CodeProps) => {
-  const { showLineNumbers, showCopyButton } = useMinimalBlogConfig();
-  const [colorMode] = useColorMode();
-  const isDark = colorMode === `dark`;
-  const github = themes.github;
-  const vsDark = themes.vsDark;
+  const { showLineNumbers, showCopyButton } = useMinimalBlogConfig()
+  const [colorMode] = useColorMode()
+  const isDark = colorMode === `dark`
 
-  const language = getLanguage(blockClassName);
-  const shouldHighlightLine = calculateLinesToHighlight(highlight);
-  const shouldShowLineNumbers = withLineNumbers || showLineNumbers;
+  const language = getLanguage(blockClassName)
+  const shouldHighlightLine = calculateLinesToHighlight(highlight)
+  const shouldShowLineNumbers = withLineNumbers || showLineNumbers
 
   return (
-    <Highlight code={codeString} language={language} theme={isDark ? darkTheme.themes.vsDark : lightTheme.themes.github}>
+    // @ts-ignore
+    <Highlight {...defaultProps} code={codeString} language={language} theme={isDark ? darkTheme : lightTheme}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <React.Fragment>
           <div className="gatsby-highlight" data-language={language}>
@@ -47,14 +45,14 @@ const Code = ({
               {showCopyButton && <Copy content={codeString} fileName={title} />}
               <code className={`code-content language-${language}`}>
                 {tokens.map((line, i) => {
-                  const lineProps = getLineProps({ line, key: i });
+                  const lineProps = getLineProps({ line, key: i })
 
                   if (shouldHighlightLine(i)) {
-                    lineProps.className = `${lineProps.className} highlight-line`;
+                    lineProps.className = `${lineProps.className} highlight-line`
                     lineProps.style = {
                       ...lineProps.style,
                       backgroundColor: isDark ? `rgba(255, 255, 255, 0.1)` : `rgba(0, 0, 0, 0.035)`,
-                    };
+                    }
                   }
 
                   return (
@@ -64,7 +62,7 @@ const Code = ({
                         <span {...getTokenProps({ token, key })} />
                       ))}
                     </div>
-                  );
+                  )
                 })}
               </code>
             </pre>
@@ -72,8 +70,7 @@ const Code = ({
         </React.Fragment>
       )}
     </Highlight>
-  );
-};
+  )
+}
 
-export default Code;
-
+export default Code
