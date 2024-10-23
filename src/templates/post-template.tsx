@@ -46,14 +46,3 @@ const PostTemplate = ({ data }) => {
 }
 
 export default PostTemplate
-
-export const PostTemplateQuery = graphql`
-  query PostPageQuery($id: String!) {
-    markdownRemark(id: { eq: $id }) {
-      frontmatter {
-        title
-      }
-      html
-    }
-  }
-  `;
