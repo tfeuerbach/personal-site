@@ -14,9 +14,10 @@ module.exports = {
     siteUrl: `https://tfeuerbach.dev`,
     siteDescription: `Thomas Feuerbach's personal website for programming, projects, and interesting things.`,
     siteImage: `/banner.jpg`,
+    siteLanguage: `en`, // Added from new config
     author: `Thomas Feuerbach`,
   },
-  trailingSlash: `never`,
+  trailingSlash: `always`, // Merged this from the new config
   plugins: [
     {
       resolve: `gatsby-plugin-decap-cms`,
@@ -35,6 +36,7 @@ module.exports = {
         externalLinks: [
           { name: `LinkedIn`, url: `https://linkedin.com/in/tfeuerbach` },
           { name: `YouTube`, url: `https://youtube.com/@tfeuerbach` },
+	  { name: `Photography`, url: `https://photos.tfeuerbach.dev/`},
         ],
       },
     },
@@ -126,4 +128,3 @@ module.exports = {
     },
   ].filter(Boolean),
 };
-
