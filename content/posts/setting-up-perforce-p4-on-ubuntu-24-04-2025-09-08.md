@@ -21,5 +21,5 @@ I've got a homelab in my office with an R220 that I was looking to repurpose, wh
 
 ## Getting the Server Ready
 
-
+The R220 had a single 128GB SSD when I first unracked it so I decided to throw in an additional 1TB to start as I knew we'd need more space than that. The plan being to use LVMs to allow me to add more space down the road for the Perforce database or depot(s). For the server install, I left the 1TB drive untouched and just created a boot, swap, and / partition using about 30GB of the 128 that were present. After the Ubuntu was installed I then proceeded to set up the LVMs.
 
