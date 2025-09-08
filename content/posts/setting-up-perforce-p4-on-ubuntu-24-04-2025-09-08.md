@@ -11,4 +11,4 @@ Initial research showed that some people have had success with Git LFS, but it's
 
 # On-Prem vs Cloud
 
-I've got a homelab in my office with an R220 that I was looking to repurpose that was a perfect fit for this job (I just had to buy another SSD and may need to get more in the future). Hosting in the cloud is a great option as well but I didn't want to rack up a bill for something that may or may not end up being a fully realized game and storage space can get pricey if we started to accrue a lot of assets.
+I've got a homelab in my office with an R220 that I was looking to repurpose that was a perfect fit for this job (I just had to buy another SSD and may need to get more in the future). Hosting in the cloud is a great option as well but I didn't want to rack up a bill for something that may or may not end up being a fully realized game and storage space can get pricey if we started to accrue a lot of assets. To ensure we could all connect to the server in my house, I planned on putting us all on the same Tailscale Network ([Tailnet](https://tailscale.com/kb/1136/tailnet)).
