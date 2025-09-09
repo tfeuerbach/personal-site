@@ -9,15 +9,17 @@ A few friends and I decided to collaborate on a game in Unreal, using a combinat
 
 Initial research showed that some people have had success with Git LFS, but it's generally considered a less-than-ideal approach due to a few quirks. All signs pointed to [Perforce P4](https://www.perforce.com/products/helix-core) (formerly Helix Core), which is the industry standard for game development. There's plenty of information out there that covers the differences between these two version control systems for game development, so I'll avoid going too deep into that for the sake of keeping this post focused.
 
----
+- - -
 
 ## On-Prem vs. Cloud
 
-[homelab image placeholder]
+
+
+![Homelab](/images/uploads/homelab.png "Office Server Rack")
 
 I've got a homelab in my office with an R220 that I was looking to repurpose, which was a perfect fit for this job. I just had to buy another SSD and may need more in the future. Hosting in the cloud is also a great option, but I didn't want to rack up a bill for something that may or may not end up being a fully realized game, and storage space can get pricey if we start to accrue a lot of assets. To ensure we could all connect to the server in my house, I planned on putting us all on the same Tailscale Network ([Tailnet](https://tailscale.com/kb/1136/tailnet)).
 
----
+- - -
 
 ## Getting the Server Ready
 
