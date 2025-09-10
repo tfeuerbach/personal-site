@@ -22,11 +22,11 @@ I've got a homelab in my office with an R220 that I was looking to repurpose, wh
 
 ## Getting the Server Ready
 
-The R220 had a single 120GB SSD and 16GB of DDR3 RAM when I first unracked it, so I decided to throw in an additional 1TB to start, as I knew we'd need more space than that. The plan was to use LVMs to allow me to add more space down the road for the Perforce database and depot(s). For the server install, I left the 1TB drive untouched and just created a boot, swap, and / partition using about 30GB of the 120GB that were present. After Ubuntu was installed, I proceeded to set up the LVMs.
+The R220 had a single 120GB SSD and 16GB of DDR3 RAM when I first unracked it, so I decided to throw in an additional 1TB to start, as I knew we'd need more space than that. The plan was to use a Logical Volume Manager (LVM) to allow me to add more space down the road for the Perforce database and depot(s). For the server install, I left the 1TB drive untouched and just created a boot, swap, and / partition using about 30GB of the 120GB that were present. After Ubuntu was installed, I proceeded to set up the LVMs.
 
 - - -
 
-## Setting Up the LVM On Both Drives
+## Creating the Logical Volumes
 
 To do this you need to boot the machine using some form of bootable media, for 99% of people this'll be a USB with your preferred OS. For this guide, I'm assuming that anyone who's reading it knows how to get that set up. If not, check out [Rufus](https://rufus.ie/en/).
 
@@ -41,7 +41,7 @@ sda      8:0    0 119.2G  0 disk
 sdb      8:16   0 953.9G  0 disk
 ```
 
-For the LVM I'm taking the unallocated space and creating another partition **/dev/sda5/** using *fdisk:*\
+For the LV, I'm taking the unallocated space and creating another partition **/dev/sda5/** using *fdisk:*\
 \
 **\[fdisk1 image]**\
 \
