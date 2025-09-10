@@ -13,10 +13,32 @@ Initial research showed that some people have had success with Git LFS, but it's
 
 ## On-Prem vs. Cloud
 
+\[image goes here]
+
+\
 I've got a homelab in my office with an R220 that I was looking to repurpose, which was a perfect fit for this job. I just had to buy another SSD and may need more in the future. Hosting in the cloud is also a great option, but I didn't want to rack up a bill for something that may or may not end up being a fully realized game, and storage space can get pricey if we start to accrue a lot of assets. To ensure we could all connect to the server in my house, I planned on putting us all on the same Tailscale Network ([Tailnet](https://tailscale.com/kb/1136/tailnet)).
 
 - - -
 
 ## Getting the Server Ready
 
-The R220 had a single 128GB SSD and 16GB of DDR3 RAM when I first unracked it, so I decided to throw in an additional 1TB to start, as I knew we'd need more space than that. The plan was to use LVMs to allow me to add more space down the road for the Perforce database and depot(s). For the server install, I left the 1TB drive untouched and just created a boot, swap, and / partition using about 30GB of the 128GB that were present. After Ubuntu was installed, I then proceeded to set up the LVMs.
+The R220 had a single 120GB SSD and 16GB of DDR3 RAM when I first unracked it, so I decided to throw in an additional 1TB to start, as I knew we'd need more space than that. The plan was to use LVMs to allow me to add more space down the road for the Perforce database and depot(s). For the server install, I left the 1TB drive untouched and just created a boot, swap, and / partition using about 30GB of the 120GB that were present. After Ubuntu was installed, I proceeded to set up the LVMs.
+
+- - -
+
+## Setting up the LVM
+
+To do this you need to boot the machine using some form of bootable media, for 99% of people this'll be a USB with your preferred OS. For this guide, I'm assuming that anyone who's reading it knows how to get that set up. If not, check out [Rufus](https://rufus.ie/en/).
+
+Here's a snippet of my *lsblk* output:
+
+```
+sda      8:0    0 119.2G  0 disk
+├─sda1   8:1    0     1G  0 part   <--/boot/efi
+├─sda2   8:2    0     8G  0 part   <--SWAP
+├─sda3   8:3    0    20G  0 part   <--/
+└─sda4   8:4    0     1G  0 part   <--/boot
+sdb      8:16   0 953.9G  0 disk
+```
+
+For the LVM I'm taking the unallocated space and creating another partition **/dev/sda5/ t**
