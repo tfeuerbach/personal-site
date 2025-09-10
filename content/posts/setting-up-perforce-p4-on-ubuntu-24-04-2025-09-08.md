@@ -5,6 +5,8 @@ date: 2025-09-08T00:44:00.000-04:00
 ---
 # Perforce as Version Control for Unreal
 
+***NEED TO FIGURE OUT WHICH VOICE I'M USING, I KEEP SWITCHING BETWEEN "I" and "YOU" RAHHHHH!***\
+\
 A few friends and I decided to collaborate on a game in Unreal, using a combination of [Multi-User Editing](https://dev.epicgames.com/documentation/en-us/unreal-engine/getting-started-with-multi-user-editing-in-unreal-engine) and a version control system. Having only worked on Unreal projects from Udemy lessons, I was unsure how to approach multi-person development. I initially considered using Git, but I quickly realized it would be a problem. Unreal projects involve much more than just code; we'd need to share 3D assets, C++ files, [C++ Blueprints](https://dev.epicgames.com/documentation/en-us/unreal-engine/cpp-and-blueprints-example), images, audio, and other file types.
 
 Initial research showed that some people have had success with Git LFS, but it's generally considered a less-than-ideal approach due to a few quirks. All signs pointed to [Perforce P4](https://www.perforce.com/products/helix-core) (formerly Helix Core), which is the industry standard for game development. There's plenty of information out there that covers the differences between these two version control systems for game development, so I'll avoid going too deep into that for the sake of keeping this post focused.
@@ -57,4 +59,6 @@ Partition type or alias (type L to list all): Linux LVM
 Changed type of partition 'Linux filesystem' to 'Linux LVM'.
 ```
 
-The changes made above are then written out by inputting **w.**
+The changes made above are then written out by inputting **w.** \
+\
+From there I then made the Physical Volume (lowest layer of LVM abstraction and designates the partition for use by the LVM) followed by the Logical Volumes for my partitions I had made during install.
