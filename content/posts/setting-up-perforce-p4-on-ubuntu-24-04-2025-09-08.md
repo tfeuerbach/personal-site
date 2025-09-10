@@ -13,7 +13,7 @@ Initial research showed that some people have had success with Git LFS, but it's
 
 ## On-Prem vs. Cloud
 
-\[image goes here]
+**\[homelab image goes here]**
 
 \
 I've got a homelab in my office with an R220 that I was looking to repurpose, which was a perfect fit for this job. I just had to buy another SSD and may need more in the future. Hosting in the cloud is also a great option, but I didn't want to rack up a bill for something that may or may not end up being a fully realized game, and storage space can get pricey if we start to accrue a lot of assets. To ensure we could all connect to the server in my house, I planned on putting us all on the same Tailscale Network ([Tailnet](https://tailscale.com/kb/1136/tailnet)).
@@ -43,4 +43,18 @@ sdb      8:16   0 953.9G  0 disk
 
 For the LVM I'm taking the unallocated space and creating another partition **/dev/sda5/** using *fdisk:*\
 \
-\[fdisk1 image]
+**\[fdisk1 image]**\
+\
+Once the partition was created, I just had to change the partition type to a 'Linux LVM'. This can be done by inputting **t** when you're in the fdisk utility, selecting the partition number (in my case it was 5), and then typing 'Linux LVM' and pressing ENTER.
+
+```
+Created a new partition 5 of type 'Linux filesystem' and of size 89.2 GiB.
+
+Command (m for help): t
+Partition number (1-5, default 5): 5
+Partition type or alias (type L to list all): Linux LVM
+
+Changed type of partition 'Linux filesystem' to 'Linux LVM'.
+```
+
+You can then write out the changes by inputting **w**.
