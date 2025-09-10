@@ -57,4 +57,4 @@ Partition type or alias (type L to list all): Linux LVM
 Changed type of partition 'Linux filesystem' to 'Linux LVM'.
 ```
 
-You can then write out the changes by inputting **w**.
+The changes made above are then written out by inputting **w.**
