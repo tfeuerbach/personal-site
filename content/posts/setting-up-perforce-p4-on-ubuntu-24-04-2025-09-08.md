@@ -26,7 +26,7 @@ The R220 had a single 120GB SSD and 16GB of DDR3 RAM when I first unracked it, s
 
 - - -
 
-## Setting up the LVM
+## Setting Up the LVM On Both Drives
 
 To do this you need to boot the machine using some form of bootable media, for 99% of people this'll be a USB with your preferred OS. For this guide, I'm assuming that anyone who's reading it knows how to get that set up. If not, check out [Rufus](https://rufus.ie/en/).
 
