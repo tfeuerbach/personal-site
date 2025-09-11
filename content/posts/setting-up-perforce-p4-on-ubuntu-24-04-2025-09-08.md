@@ -66,9 +66,19 @@ From there I then made the Physical Volume (lowest layer of LVM abstraction and 
 ```
 sudo pvcreate /dev/sda5
 sudo vgcreate vg_os /dev/sda5
+
 sudo lvcreate --name root_lv --size 20G vg_os
 sudo lvcreate --name swap_lv --size 8G vg_os
 sudo lvcreate --name p4root_lv --extents 100%FREE vg_os
 ```
 
-Now I can take my other SSD (1TB) and do the same thing.
+Now I can take my other SSD (1TB) and go through the same process but we only need a single LV here since it's all for the depot(s). One thing to note is that I formatted the volume as XFS which is a great filesystem for larger files and parallel I/O.
+
+```
+sudo pvcreate /dev/sdb
+sudo vgcreate vg_depot /dev/sdb
+
+sudo lvcreate --name depot_lv --extents 100%FREE vg_depot
+
+sudo mkfs.xfs /dev/vg_depot/depot_lv
+```
