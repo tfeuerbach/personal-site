@@ -61,4 +61,12 @@ Changed type of partition 'Linux filesystem' to 'Linux LVM'.
 
 The changes made above are then written out by inputting **w.** \
 \
-From there I then made the Physical Volume (lowest layer of LVM abstraction and designates the partition for use by the LVM) followed by the Logical Volumes for my partitions I had made during install.
+From there I then made the Physical Volume (lowest layer of LVM abstraction and designates the partition for use by the LVM) followed by the Logical Volumes for my partitions I had made during install:
+
+```
+sudo pvcreate /dev/sda5
+sudo vgcreate vg_os /dev/sda5
+sudo lvcreate --name root_lv --size 20G vg_os
+sudo lvcreate --name swap_lv --size 8G vg_os
+sudo lvcreate --name p4root_lv --extents 100%FREE vg_os
+```
