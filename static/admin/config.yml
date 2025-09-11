@@ -3,7 +3,11 @@ backend:
   repo: tfeuerbach/personal-site
   branch: main
 
-media_folder: "images/uploads"
+media_library:
+  name: cloudinary
+  config:
+    cloud_name: du3gxqax4
+    api_key: "955514553763115"
 
 publish_mode: editorial_workflow
 

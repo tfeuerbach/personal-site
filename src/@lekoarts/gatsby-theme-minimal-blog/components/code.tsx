@@ -2,9 +2,7 @@ import * as React from "react";
 import { useColorMode } from "theme-ui";
 import { Highlight } from "prism-react-renderer"; // No more defaultProps
 import { calculateLinesToHighlight, getLanguage, GetLanguageInput } from "@lekoarts/themes-utils";
-// import lightTheme from "prism-react-renderer/themes/github"; // Updated theme import
 import { themes } from 'prism-react-renderer';
-// import darkTheme from "prism-react-renderer/themes/vsDark"; // Updated theme import
 import Copy from "./copy";
 import useMinimalBlogConfig from "../hooks/use-minimal-blog-config";
 
@@ -26,15 +24,15 @@ const Code = ({
   const { showLineNumbers, showCopyButton } = useMinimalBlogConfig();
   const [colorMode] = useColorMode();
   const isDark = colorMode === `dark`;
-  const github = themes.github;
-  const vsDark = themes.vsDark;
+  const lightTheme = themes.github;
+  const darkTheme = themes.vsDark;
 
   const language = getLanguage(blockClassName);
   const shouldHighlightLine = calculateLinesToHighlight(highlight);
   const shouldShowLineNumbers = withLineNumbers || showLineNumbers;
 
   return (
-    <Highlight code={codeString} language={language} theme={isDark ? darkTheme.themes.vsDark : lightTheme.themes.github}>
+    <Highlight code={codeString} language={language} theme={isDark ? darkTheme : lightTheme}>
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <React.Fragment>
           <div className="gatsby-highlight" data-language={language}>
