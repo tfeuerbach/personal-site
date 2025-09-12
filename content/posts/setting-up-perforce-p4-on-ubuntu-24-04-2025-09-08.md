@@ -97,3 +97,9 @@ sudo mount /dev/vg_os/root_lv /mnt/new_root
 
 sudo rsync -axHAX --exclude=/boot/* /mnt/old_root/ /mnt/new_root/
 ```
+
+- - -
+
+## Updating the System for LVM Booting
+
+To get the system to boot and use the LVMs that I've set up, I need to *chroot* into the new filesystem and update the bootloader. The steps for doing that consist of mounting the virtual filesystems from the live environment to /mnt/new_root/, mounting the boot partitions, *chroot* into the new root filesystem, and then update the **/etc/fstab.**
