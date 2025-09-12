@@ -31,7 +31,7 @@ For the server install, I wasn't able to set up an LVM in the installer while ke
 
 To do this you need to boot using some form of bootable media. For 99% of people, this will be a USB with your preferred OS. For this guide, I'm assuming that anyone who's reading it knows how to get that set up. If not, check out [Rufus](https://rufus.ie/en/).
 
-Here's a snippet of my *lsblk* output:
+Here's a snippet of my `lsblk` output:
 
 ```
 sda      8:0    0 119.2G  0 disk
@@ -42,11 +42,11 @@ sda      8:0    0 119.2G  0 disk
 sdb      8:16   0 953.9G  0 disk
 ```
 
-For the LV, I'm taking the unallocated space and creating another partition **/dev/sda5/** using *fdisk:*
+For the LV, I'm taking the unallocated space and creating another partition **/dev/sda5/** using `fdisk`:
 
 **\[fdisk1 image]**
 
-Once the partition was created, I just had to change the partition type to a 'Linux LVM'. This can be done by inputting **t** when you're in the fdisk utility, selecting the partition number (in my case it was 5), and then typing 'Linux LVM' and pressing ENTER.
+Once the partition was created, I just had to change the partition type to a 'Linux LVM'. This can be done by inputting `t` when you're in the fdisk utility, selecting the partition number (in my case it was 5), and then typing 'Linux LVM' and pressing ENTER.
 
 ```
 Created a new partition 5 of type 'Linux filesystem' and of size 89.2 GiB.
@@ -58,7 +58,7 @@ Partition type or alias (type L to list all): Linux LVM
 Changed type of partition 'Linux filesystem' to 'Linux LVM'.
 ```
 
-The changes made above are then written out by inputting **w.**
+The changes made above are then written out by inputting `w`.
 
 From there, I then made the Physical Volume (lowest layer of LVM abstraction and designates the partition for use by the LVM) followed by the Logical Volumes for my partitions I had made during install:
 
@@ -86,7 +86,7 @@ sudo mkfs.xfs /dev/vg_depot/depot_lv
 
 ## Copying Partition Data to the Logical Volumes
 
-At this point we're ready to move the system data and partitions into their respective LV's. For my root partition **/dev/sda3/,** the filesystem needs to be ext4 and we need to make a temporary mount point for the old and the new. Once we've done that, it's a quick *rsync*.
+At this point we're ready to move the system data and partitions into their respective LV's. For my root partition **/dev/sda3/,** the filesystem needs to be ext4 and we need to make a temporary mount point for the old and the new. Once we've done that, it's a quick `rsync`.
 
 ```
 sudo mkfs.ext4 /dev/vg_os/root_lv
@@ -102,7 +102,7 @@ sudo rsync -axHAX --exclude=/boot/* /mnt/old_root/ /mnt/new_root/
 
 ## Updating the System for LVM Booting
 
-To get the system to boot and use the LVMs that I've set up, I need to *chroot* into the new filesystem and update the bootloader. The steps for doing that consist of mounting the virtual filesystems from the live environment to /mnt/new_root/, mounting the boot partitions, *chroot* into the new root filesystem, and then update the **/etc/fstab.**
+To get the system to boot and use the LVMs that I've set up, I need to `chroot` into the new filesystem and update the bootloader. The steps for doing that consist of mounting the virtual filesystems from the live environment to /mnt/new_root/, mounting the boot partitions, *chroot* into the new root filesystem, and then update the **/etc/fstab.**
 
 ```
 sudo mount --bind /dev /mnt/new_root/dev
@@ -116,7 +116,7 @@ sudo mount /dev/sda1 /mnt/new_root/boot/efi
 sudo chroot /mnt/new_root
 ```
 
-At this point, I'm now in my *chroot* environment and see *root@ubuntu-server:/#* rather than *ubuntu-server@ubuntu-server:~$* and I now can make changes to **/etc/fstab.**
+At this point, I'm now in my `chroot` environment and see `root@ubuntu-server:/#` rather than `ubuntu-server@ubuntu-server:~$` and I now can make changes to **/etc/fstab.**
 
 ### Old /etc/fstab:
 
@@ -155,16 +155,15 @@ UUID=1c71978f-5874-4661-8e18-31386a98e7df /boot ext4 defaults 0 1
 
 - - -
 
-## Final Steps: Update *initramfs* and GRUB, Reboot
+## Final Steps: Update `initramfs` and GRUB, Reboot
 
 **Update the *initramfs:***
 
 ```
 update-initramfs -u -k all
-
 ```
 
-**Note:** You can ignore the message that systemd still uses the old version of your fstab. *systemctl daemon-reload* isn't necessary here as the change to the fstab will be picked up when we reboot anyway.\
+**Note:** You can ignore the message that systemd still uses the old version of your fstab. `systemctl daemon-reload` isn't necessary here as the change to the fstab will be picked up when we reboot anyway.\
 \
 **Update GRUB config:**
 
@@ -178,10 +177,12 @@ update-grub
 grub-install /dev/sda
 ```
 
-**Exit *chroot,* unmount the filesystems, reboot:**
+**Exit `chroot`, unmount the filesystems, reboot:**
 
 ```
 exit
 sudo umount -R /mnt/new_root
 reboot
 ```
+
+**Note:**  After you run `grub-install` and reboot, your server might freak out a little and drop you into an emergency shell. Don't worry, this is normal and can happen when performing a migration to LVMs. It's a harmless race condition that can happen when the system attempts to mount the LVs before the LVM daemon has fully initialized. If this happens, just reboot a second time. Your machine will have the LVM info cached and boot up correctly.
