@@ -155,4 +155,33 @@ UUID=1c71978f-5874-4661-8e18-31386a98e7df /boot ext4 defaults 0 1
 
 - - -
 
-## Final Steps: Update *initramfs* and GRUB -> Reboot
+## Final Steps: Update *initramfs* and GRUB, Reboot
+
+**Update the *initramfs:***
+
+```
+update-initramfs -u -k all
+
+```
+
+**Note:** You can ignore the message that systemd still uses the old version of your fstab. *systemctl daemon-reload* isn't necessary here as the change to the fstab will be picked up when we reboot anyway.\
+\
+**Update GRUB config:**
+
+```
+update-grub
+```
+
+**Reinstall GRUB to the master boot record:**
+
+```
+grub-install /dev/sda
+```
+
+**Exit *chroot,* unmount the filesystems, reboot:**
+
+```
+exit
+sudo umount -R /mnt/new_root
+reboot
+```
