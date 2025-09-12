@@ -42,7 +42,7 @@ sda      8:0    0 119.2G  0 disk
 sdb      8:16   0 953.9G  0 disk
 ```
 
-For the LV, I'm taking the unallocated space and creating another partition **/dev/sda5/** using *fdisk:*\
+For the LV, I'm taking the unallocated space and creating another partition **/dev/sda5/** using *fdisk:*
 
 **\[fdisk1 image]**
 
