@@ -103,3 +103,56 @@ sudo rsync -axHAX --exclude=/boot/* /mnt/old_root/ /mnt/new_root/
 ## Updating the System for LVM Booting
 
 To get the system to boot and use the LVMs that I've set up, I need to *chroot* into the new filesystem and update the bootloader. The steps for doing that consist of mounting the virtual filesystems from the live environment to /mnt/new_root/, mounting the boot partitions, *chroot* into the new root filesystem, and then update the **/etc/fstab.**
+
+```
+sudo mount --bind /dev /mnt/new_root/dev
+sudo mount --bind /sys /mnt/new_root/sys
+sudo mount --bind /proc /mnt/new_root/proc
+sudo mount --bind /run /mnt/new_root/run
+
+sudo mount /dev/sda4 /mnt/new_root/boot
+sudo mount /dev/sda1 /mnt/new_root/boot/efi
+
+sudo chroot /mnt/new_root
+```
+
+At this point, I'm now in my *chroot* environment and see *root@ubuntu-server:/#* rather than *ubuntu-server@ubuntu-server:~$* and I now can make changes to **/etc/fstab.**
+
+### Old /etc/fstab:
+
+```
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+/dev/disk/by-uuid/df397092-bb7b-4b08-b351-1b33f520dae9 none swap sw 0 0
+# / was on /dev/sda3 during curtin installation
+/dev/disk/by-uuid/6f613d07-1d3c-48f8-860c-0d133821f636 / ext4 defaults 0 1
+# /boot was on /dev/sda4 during curtin installation
+/dev/disk/by-uuid/1c71978f-5874-4661-8e18-31386a98e7df /boot ext4 defaults 0 1
+# /boot/efi was on /dev/sda1 during curtin installation
+/dev/disk/by-uuid/2186-E48E /boot/efi vfat defaults 0 1
+```
+
+### Updated /etc/fstab:
+
+```
+# EFI and Boot partitions
+UUID=2186-E48E /boot/efi vfat defaults 0 1
+UUID=1c71978f-5874-4661-8e18-31386a98e7df /boot ext4 defaults 0 1
+
+# New LVM Logical Volumes for OS and Perforce metadata
+/dev/mapper/vg_os-root_lv / ext4 noatime,defaults 0 1
+/dev/mapper/vg_os-swap_lv none swap sw 0 0
+/dev/mapper/vg_os-p4root_lv /p4/root ext4 noatime,defaults 0 2
+
+# New LVM Logical Volume for Perforce depots
+/dev/mapper/vg_depot-depot_lv /p4/depot xfs noatime,defaults 0 2
+```
+
+- - -
+
+## Final Steps: Update *initramfs* and GRUB -> Reboot
