@@ -2,52 +2,7 @@
 import { jsx, Box, Heading, Text } from 'theme-ui'
 import * as React from 'react'
 import { useState } from 'react'
-import { Link } from 'gatsby'
-
-const projects = [
-  {
-    title: 'SchemaScribe',
-    description: 'A simple, fast, and focused tool for generating and annotating JSON Schemas.',
-    link: 'https://schemascribe.tfeuerbach.dev',
-    image: '/media/projects/placeholder-square.jpg',
-  },
-  {
-    title: 'Steam Wallpaper',
-    description: 'A web app to search for and download high-resolution wallpapers from Steam.',
-    link: 'https://steamwallpaper.com',
-    image: '/media/projects/placeholder-square.jpg',
-  },
-  {
-    title: 'Track Titan Downloader',
-    description: 'A GUI application for downloading iRacing setups in bulk from TrackTitan.io.',
-    link: 'https://tfeuerbach.github.io/track-titan-downloader',
-    image: '/media/projects/placeholder-square.jpg',
-  },
-  {
-    title: 'Stay on 23H2',
-    description: 'A script to prevent Windows from upgrading beyond version 23H2 to maintain Windows Mixed Reality support.',
-    link: 'https://github.com/tfeuerbach/stay-on-23h2',
-    image: '/media/projects/placeholder-square.jpg',
-  },
-  {
-    title: 'FIP Radio Discord Bot',
-    description: 'A Discord bot that streams Radio France’s FIP stations into a voice channel.',
-    link: 'https://fip-bot.tfeuerbach.dev',
-    image: '/media/projects/placeholder-square.jpg',
-  },
-  {
-    title: 'Virginia Tech Email Saver',
-    description: 'A self-hosted program to automatically log into a Virginia Tech email account to prevent deactivation.',
-    link: 'https://github.com/tfeuerbach/virginiatech-email-saver',
-    image: '/media/projects/placeholder-square.jpg',
-  },
-  {
-    title: 'Feuerbach Wedding',
-    description: 'The official website for our wedding, providing guests with event details and RSVP options.',
-    link: 'https://feuerbachwedding.com',
-    image: '/media/projects/placeholder-square.jpg',
-  },
-]
+import { useStaticQuery, graphql } from 'gatsby'
 
 const ProjectCard = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false)
@@ -129,20 +84,42 @@ const ProjectCard = ({ project }) => {
   )
 }
 
-const ProjectGrid = () => (
-  <Box
-    sx={{
-      display: `flex`,
-      flexWrap: `wrap`,
-      justifyContent: `center`,
-      gap: 4,
-      mt: [4, 5],
-    }}
-  >
-    {projects.map((project) => (
-      <ProjectCard key={project.title} project={project} />
-    ))}
-  </Box>
-)
+const ProjectGrid = () => {
+  const data = useStaticQuery(graphql`
+    query {
+      allMarkdownRemark(
+        filter: { fileAbsolutePath: { regex: "/content/projects/" } }
+        sort: { frontmatter: { date: DESC } }
+      ) {
+        nodes {
+          frontmatter {
+            title
+            description
+            link
+            image
+          }
+        }
+      }
+    }
+  `)
+
+  const projects = data.allMarkdownRemark.nodes.map(node => node.frontmatter)
+
+  return (
+    <Box
+      sx={{
+        display: `flex`,
+        flexWrap: `wrap`,
+        justifyContent: `center`,
+        gap: 4,
+        mt: [4, 5],
+      }}
+    >
+      {projects.map((project) => (
+        <ProjectCard key={project.title} project={project} />
+      ))}
+    </Box>
+  )
+}
 
 export default ProjectGrid
