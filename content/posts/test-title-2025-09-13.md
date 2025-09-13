@@ -1,8 +1,9 @@
 ---
-title: Test Title
+title: Installing Perforce P4 (formerly Helix Core) for Development in Unreal
+  Engine 5.6 on a Dell R220 Running Ubuntu Server 24.04
 date: 2025-09-13T15:00:00.000-04:00
 ---
-# Perforce as Version Control for Unreal on a Dell R220
+# Perforce as Version Control for Unreal
 
 A couple friends and I decided to collaborate on a game in Unreal, using a combination of [Multi-User Editing](https://dev.epicgames.com/documentation/en-us/unreal-engine/getting-started-with-multi-user-editing-in-unreal-engine) and a version control system. Having only worked on Unreal projects from Udemy lessons, I was unsure how to approach multi-person development. I initially considered using Git, but quickly realized it would be a problem. Unreal projects involve much more than just code; we'd need to share 3D assets, C++ files, [C++ Blueprints](https://dev.epicgames.com/documentation/en-us/unreal-engine/cpp-and-blueprints-example), images, audio, and other file types.
 
