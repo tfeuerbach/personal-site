@@ -194,3 +194,29 @@ reboot
 ## Housekeeping Before Installing P4 Server
 
 After I verified the system could boot properly and that the partition migrations to the LVM were done properly, I booted back into the live USB and used `fdisk` to delete my unused root and SWAP partitions which freed up about 30GB. I then added that to `p4root_lv` using the same steps as above (create partition, change filesystem, create physical volume, logical volume, then add to existing LV).
+
+### Configuring Kernel Networking Params
+
+Another thing that will benefit performance is adjusting the network params to handle high-volume data transfers. Increasing the buffer size allows the server to handle large `p4 sync` or `submit` operations. To do this, edit `/etc/sysctl.conf` (in my case I'm going to make a file called `99-perforce.conf` and place that in `/etc/sysctl.d/` for organization purposes):
+
+```
+# Perforce-related TCP/IP tunings
+#
+# The maximum size of the receive and send buffers for all network connections.
+# This sets the hard limit for how much memory the kernel can use for network buffers.
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+
+# This line sets the minimum, default, and maximum memory allocated for TCP sockets system-wide.
+# The three values are: [min_value, default_value, max_value].
+net.ipv4.tcp_mem = 1528512 2038016 8388608
+
+# These lines set the minimum, default, and maximum TCP receive buffer sizes (in bytes).
+# This is a range for the kernel to use for each individual TCP connection.
+net.ipv4.tcp_rmem = 4096 87380 16777216
+
+# These lines set the minimum, default, and maximum TCP send buffer sizes (in bytes).
+# This provides a range for the kernel to use for each individual TCP connection.
+net.ipv4.tcp_wmem = 4096 65536 16777216
+```
+I then apply the changes, `sudo sysctl -p /etc/sysctl.d/99-perforce.conf`.
