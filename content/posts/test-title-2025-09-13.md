@@ -224,4 +224,4 @@ I then apply the changes, `sudo sysctl -p /etc/sysctl.d/99-perforce.conf`.
 
 - - -
 
-# Installing P4 Server
+# Installing Perforce P4 Server
