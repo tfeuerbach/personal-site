@@ -25,7 +25,7 @@ I've got a homelab in my office with an R220 I was looking to repurpose after us
 
 The R220 had a single 120GB SSD and 16GB of DDR3 RAM when I first unracked it, so I decided to throw in an additional 1TB as I knew we'd need more space than that. My plan was to use a Logical Volume Manager (LVM) to allow me to add more down the road for the Perforce database and depot(s). Best practice with Perforce is to keep the database on a separate drive than the depot(s). In my case, the database partition (P4ROOT) would exist on the 120GB SSD logical volume, and the depot(s) would sit on the 1TB SSD logical volume.
 
-For the server install, **I wasn't able to set up an LVM on a single SSD in the installer while keeping /boot/efi/ and /boot/ on their own partitions outside the LVM**. Because of this, I installed Ubuntu Server 24.04 normally with the goal of setting up the LVM and migrating my SWAP and root partitions later. I left my 1TB SSD untouched as there wasn't a need to install anything on it in the beginning. After Ubuntu was installed, I proceeded to set up the LVMs.
+For the server install, **I wasn't able to set up an LVM on a single SSD in the installer while keeping `/boot/efi/` and `/boot/` on their own partitions outside the LVM**. Because of this, I installed Ubuntu Server 24.04 normally with the goal of setting up the LVM and migrating my SWAP and root partitions later. I left my 1TB SSD untouched as there wasn't a need to install anything on it in the beginning. After Ubuntu was installed, I proceeded to set up the LVMs.
 
 - - -
 
@@ -44,11 +44,11 @@ sda      8:0    0 119.2G  0 disk
 sdb      8:16   0 953.9G  0 disk
 ```
 
-For the LV, I'm taking the unallocated space and creating another partition **/dev/sda5/** using `fdisk`:
+For the LV, I'm taking the unallocated space and creating another partition `/dev/sda5/` using `fdisk`:
 
 **\[fdisk1 image]**
 
-Once the partition was created, I just had to change the partition type to a 'Linux LVM'. This can be done by inputting `t` when you're in the fdisk utility, selecting the partition number (in my case it was 5), and then typing 'Linux LVM' and pressing ENTER.
+Once the partition was created, I just had to change the partition type to a 'Linux LVM'. This can be done by inputting `t` when you're in the `fdisk` utility, selecting the partition number (in my case it was 5), and then typing 'Linux LVM' and pressing ENTER.
 
 ```
 Created a new partition 5 of type 'Linux filesystem' and of size 89.2 GiB.
@@ -88,7 +88,7 @@ sudo mkfs.xfs /dev/vg_depot/depot_lv
 
 ## Copying Partition Data to the Logical Volumes
 
-At this point we're ready to move the system data and partitions into their respective LV's. For my root partition **/dev/sda3/,** the filesystem needs to be ext4 and we need to make a temporary mount point for the old and the new. Once we've done that, it's a quick `rsync`.
+At this point we're ready to move the system data and partitions into their respective LV's. For my root partition `/dev/sda3/`, the filesystem needs to be ext4 and we need to make a temporary mount point for the old and the new. Once we've done that, it's a quick `rsync`.
 
 ```
 sudo mkfs.ext4 /dev/vg_os/root_lv
@@ -104,7 +104,7 @@ sudo rsync -axHAX --exclude=/boot/* /mnt/old_root/ /mnt/new_root/
 
 ## Updating the System for LVM Booting
 
-To get the system to boot and use the LVMs that I've set up, I need to `chroot` into the new filesystem and update the bootloader. The steps for doing that consist of mounting the virtual filesystems from the live environment to /mnt/new_root/, mounting the boot partitions, *chroot* into the new root filesystem, and then update the **/etc/fstab.**
+To get the system to boot and use the LVMs that I've set up, I need to `chroot` into the new filesystem and update the bootloader. The steps for doing that consist of mounting the virtual filesystems from the live environment to `/mnt/new_root/`, mounting the boot partitions, `chroot` into the new root filesystem, and then update the `/etc/fstab`.
 
 ```
 sudo mount --bind /dev /mnt/new_root/dev
@@ -118,7 +118,7 @@ sudo mount /dev/sda1 /mnt/new_root/boot/efi
 sudo chroot /mnt/new_root
 ```
 
-At this point, I'm now in my `chroot` environment and see `root@ubuntu-server:/#` rather than `ubuntu-server@ubuntu-server:~$` and I now can make changes to **/etc/fstab.**
+At this point, I'm now in my `chroot` environment and see `root@ubuntu-server:/#` rather than `ubuntu-server@ubuntu-server:~$` and I now can make changes to `/etc/fstab`.
 
 ### Old /etc/fstab:
 
@@ -165,7 +165,7 @@ UUID=1c71978f-5874-4661-8e18-31386a98e7df /boot ext4 defaults 0 1
 update-initramfs -u -k all
 ```
 
-**Note:** You can ignore the message that systemd still uses the old version of your fstab. `systemctl daemon-reload` isn't necessary here as the change to the fstab will be picked up when we reboot anyway.\
+**Note:** You can ignore the message that `systemd` still uses the old version of your fstab. `systemctl daemon-reload` isn't necessary here as the change to the `fstab` will be picked up when we reboot anyway.\
 \
 **Update GRUB config:**
 
@@ -253,3 +253,9 @@ If you're unfamiliar with adding external/non-default Linux repo's to your distr
         | sudo tee /usr/share/keyrings/perforce.gpg
      ```
    * `sudo vi /etc/apt/sources.list.d/perforce.list` to create and edit the repo file with this line: `deb [signed-by=/usr/share/keyrings/perforce.gpg] https://package.perforce.com/apt/ubuntu noble release`
+
+## Downloading P4 Server
+
+When we run `sudo apt install helix-p4d` we're downloading P4 Server (p4d) and P4 CLI Client (p4) along with their dependencies like `p4dctl`, `p4-server-base`, `p4-cli-base`, etc.
+
+Once that installs it'll be located in `/opt/perforce/`.
