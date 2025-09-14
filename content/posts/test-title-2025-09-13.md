@@ -219,4 +219,9 @@ net.ipv4.tcp_rmem = 4096 87380 16777216
 # This provides a range for the kernel to use for each individual TCP connection.
 net.ipv4.tcp_wmem = 4096 65536 16777216
 ```
+
 I then apply the changes, `sudo sysctl -p /etc/sysctl.d/99-perforce.conf`.
+
+- - -
+
+# Installing P4 Server
