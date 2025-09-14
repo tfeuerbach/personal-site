@@ -6,7 +6,7 @@ backend:
 media_library:
   name: cloudinary
   config:
-    cloud_name: du3gxqax4
+    cloud_name: tfeuerbach-blog
     api_key: "955514553763115"
 
 publish_mode: editorial_workflow
