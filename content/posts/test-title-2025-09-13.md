@@ -245,3 +245,11 @@ If you're unfamiliar with adding external/non-default Linux repo's to your distr
         | grep -q "E58131C0AEA7B082C6DC4C937123CB760FF18869" \
         && echo "true"
      ```
+2. Add the key to the system keyring and create a file for the repo. Then run: `sudo apt update`
+
+   * ```
+     wget -qO - https://package.perforce.com/perforce.pubkey \
+        | gpg --dearmor \
+        | sudo tee /usr/share/keyrings/perforce.gpg
+     ```
+   * `sudo vi /etc/apt/sources.list.d/perforce.list` to create and edit the repo file with this line: `deb [signed-by=/usr/share/keyrings/perforce.gpg] https://package.perforce.com/apt/ubuntu noble release`
