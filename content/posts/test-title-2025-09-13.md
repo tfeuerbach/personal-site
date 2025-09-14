@@ -225,3 +225,5 @@ I then apply the changes, `sudo sysctl -p /etc/sysctl.d/99-perforce.conf`.
 - - -
 
 # Installing Perforce P4 Server
+
+Perforce documentation on installing P4 on Linux can be found [here](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-install-linux.html). The following is my attempt at supplementing their documentation with an anecdotal guide that I would have liked to have when doing this myself. For certain steps, I'll be brief as there are some areas in the documentation that don't require any further explanation. **TL;DR - This is not a total replacement for Perforce's documentation/guide. Supplement this post with their instructions.**
