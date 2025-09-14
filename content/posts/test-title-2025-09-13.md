@@ -188,3 +188,9 @@ reboot
 ```
 
 **Note:**  After you run `grub-install` and reboot, your server might freak out a little and drop you into an emergency shell. Don't worry, this is normal and can happen when performing a migration to LVMs. It's a harmless race condition that can happen when the system attempts to mount the LVs before the LVM daemon has fully initialized. If this happens, just reboot a second time. Your machine will have the LVM info cached and boot up correctly.
+
+- - -
+
+## Housekeeping Before Installing P4 Server
+
+After I verified the system could boot properly and that the partition migrations to the LVM were done properly, I booted back into the live USB and used `fdisk` to delete my unused root and SWAP partitions which freed up about 30GB. I then added that to `p4root_lv` using the same steps as above (create partition, change filesystem, create physical volume, logical volume, then add to existing LV).
