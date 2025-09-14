@@ -23,7 +23,7 @@ I've got a homelab in my office with an R220 I was looking to repurpose after us
 
 ## Getting the Server Ready
 
-The R220 had a single 120GB SSD and 16GB of DDR3 RAM when I first unracked it, so I decided to throw in an additional 1TB to start, as I knew we'd need more space than that. My plan was to use a Logical Volume Manager (LVM) to allow me to add more space down the road for the Perforce database and depot(s). Best practice is to keep the database on a separate drive than the depot(s). In my case, the database partition (P4ROOT) would exist on the 120GB SSD logical volume, and the depot(s) would sit on the 1TB SSD logical volume.
+The R220 had a single 120GB SSD and 16GB of DDR3 RAM when I first unracked it, so I decided to throw in an additional 1TB as I knew we'd need more space than that. My plan was to use a Logical Volume Manager (LVM) to allow me to add more down the road for the Perforce database and depot(s). Best practice with Perforce is to keep the database on a separate drive than the depot(s). In my case, the database partition (P4ROOT) would exist on the 120GB SSD logical volume, and the depot(s) would sit on the 1TB SSD logical volume.
 
 For the server install, I wasn't able to set up an LVM in the installer while keeping /boot/efi/ and /boot/ in their own partitions. Because of this, I installed Ubuntu Server 24.04 normally with the goal of setting up the LVM and migrating my SWAP and root partitions later. I left my 1TB SSD untouched as there wasn't a need to install anything on it in the beginning. After Ubuntu was installed, I proceeded to set up the LVMs.
 
