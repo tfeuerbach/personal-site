@@ -25,13 +25,13 @@ I've got a homelab in my office with an R220 I was looking to repurpose after us
 
 The R220 had a single 120GB SSD and 16GB of DDR3 RAM when I first unracked it, so I decided to throw in an additional 1TB as I knew we'd need more space than that. My plan was to use a Logical Volume Manager (LVM) to allow me to add more down the road for the Perforce database and depot(s). Best practice with Perforce is to keep the database on a separate drive than the depot(s). In my case, the database partition (P4ROOT) would exist on the 120GB SSD logical volume, and the depot(s) would sit on the 1TB SSD logical volume.
 
-For the server install, I wasn't able to set up an LVM in the installer while keeping /boot/efi/ and /boot/ in their own partitions. Because of this, I installed Ubuntu Server 24.04 normally with the goal of setting up the LVM and migrating my SWAP and root partitions later. I left my 1TB SSD untouched as there wasn't a need to install anything on it in the beginning. After Ubuntu was installed, I proceeded to set up the LVMs.
+For the server install, **I wasn't able to set up an LVM on a single SSD in the installer while keeping /boot/efi/ and /boot/ on their own partitions outside the LVM**. Because of this, I installed Ubuntu Server 24.04 normally with the goal of setting up the LVM and migrating my SWAP and root partitions later. I left my 1TB SSD untouched as there wasn't a need to install anything on it in the beginning. After Ubuntu was installed, I proceeded to set up the LVMs.
 
 - - -
 
 ## Creating the Logical Volumes
 
-To do this you need to boot using some form of bootable media. For 99% of people, this will be a USB with your preferred OS. For this guide, I'm assuming that anyone who's reading it knows how to get that set up. If not, check out [Rufus](https://rufus.ie/en/).
+To do this you need to boot using some form of bootable media. For most people, this will be a USB with your preferred OS. For this guide, I'm assuming that anyone who's reading it knows how to get that set up. If not, check out [Rufus](https://rufus.ie/en/).
 
 Here's a snippet of my `lsblk` output:
 
@@ -234,4 +234,14 @@ Perforce documentation on installing P4 on Linux can be found [here](https://hel
 
 If you're unfamiliar with adding external/non-default Linux repo's to your distribution, I highly encourage you to read [this guide](https://documentation.ubuntu.com/server/explanation/software/third-party-repository-usage/) instead of blindly following the guide. I believe that understanding how and why we do the following is **crucial** to being a responsible and capable Linux admin.
 
-1. \`wget https://package.perforce.com/perforce.pubkey\`
+1. Download and verify Perforce's public key
+
+   * ```
+     wget https://package.perforce.com/perforce.pubkey
+
+     gpg -n --import --import-options import-show perforce.pubkey
+
+     gpg -n --import --import-options import-show perforce.pubkey \
+        | grep -q "E58131C0AEA7B082C6DC4C937123CB760FF18869" \
+        && echo "true"
+     ```
