@@ -12,7 +12,7 @@ Initial research showed that some people have had success with Git LFS, but it's
 
 ## On-Prem vs. Cloud
 
-<div style="text-align: center;">
+<div style={{ textAlign: 'center' }}>
   <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1757824949/homelab-r220.png" alt="homelab-r220" />
 </div>
 
