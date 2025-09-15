@@ -30,7 +30,7 @@ const code: ThemeUICSSObject = {
     bg: `gray.5`,
     color: `gray.8`,
     px: 2,
-    py: 1,
+    py: `1px`,
     borderRadius: `4px`,
     fontSize: `0.95em`,
   },
@@ -153,6 +153,9 @@ const code: ThemeUICSSObject = {
       content: `'diff'`,
       background: `#e6ffed`,
     },
+  },
+  "li .gatsby-highlight": {
+    mx: [0, 0, 0, 0],
   },
   '.gatsby-highlight > code[class*="language-"], .gatsby-highlight > pre[class=*="language-"]': {
     wordSpacing: `normal`,

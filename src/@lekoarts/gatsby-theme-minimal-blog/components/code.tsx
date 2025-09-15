@@ -24,8 +24,8 @@ const Code = ({
   const { showLineNumbers, showCopyButton } = useMinimalBlogConfig();
   const [colorMode] = useColorMode();
   const isDark = colorMode === `dark`;
-  const lightTheme = themes.github;
-  const darkTheme = themes.vsDark;
+  const lightTheme = themes.materialLight;
+  const darkTheme = themes.dracula;
 
   const language = getLanguage(blockClassName);
   const shouldHighlightLine = calculateLinesToHighlight(highlight);
