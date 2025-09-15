@@ -1,6 +1,5 @@
 ---
-title: Installing Perforce P4 (formerly Helix Core) for Development in Unreal
-  Engine 5.6 on a Dell R220 Running Ubuntu Server 24.04
+title: Installing Perforce P4 for Development in Unreal Engine 5.6
 date: 2025-09-13T15:00:00.000-04:00
 ---
 # Perforce as Version Control for Unreal
