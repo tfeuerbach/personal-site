@@ -257,4 +257,44 @@ If you're unfamiliar with adding external/non-default Linux repo's to your distr
 
 When we run `sudo apt install helix-p4d` we're downloading P4 Server (p4d) and P4 CLI Client (p4) along with their dependencies like `p4dctl`, `p4-server-base`, `p4-cli-base`, etc.
 
-Once that installs it'll be located in `/opt/perforce/`.
+Once that installs it'll be located in `/opt/perforce/` and from there you just need to do a `sudo chmod +x /opt/perforce/sbin/configure-*` to ensure the scripts are executable and then run `sudo /opt/perforce/sbin/configure-helix-p4d.sh`.\
+\
+**Note:** For fields where there's no visible response from me, that's because I'm taking the default value that exists within the `[brackets]`.
+
+```
+tfeuerbach@perforce-nexus:~$ sudo /opt/perforce/sbin/configure-helix-p4d.sh
+
+Summary of arguments passed:
+
+Service-name        [(not specified)]
+P4PORT              [(not specified)]
+P4ROOT              [(not specified)]
+Super-user          [(not specified)]
+Super-user passwd   [(not specified)]
+Unicode mode        [(not specified)]
+Case-sensitive      [(not specified)]
+
+For a list of other options, type Ctrl-C to exit, and then run:
+$ sudo /opt/perforce/sbin/configure-helix-p4d.sh --help
+
+
+You have entered interactive configuration for p4d. This script
+will ask a series of questions, and use your answers to configure p4d
+for first time use. Options passed in from the command line or
+automatically discovered in the environment are presented as defaults.
+You may press enter to accept them, or enter an alternative.
+
+Please provide the following details about your desired P4 environment:
+
+
+P4 Service name [master]: dalaran
+Service dalaran not found. Creating...
+P4 Server root (P4ROOT) [/opt/perforce/servers/dalaran]: /p4/root
+{P4} Server unicode-mode (y/n) [n]: n
+P4 Server case-sensitive (y/n) [y]: y
+P4 Server address (P4PORT) [ssl:1666]:
+P4 super-user login [super]:
+P4 super-user password:
+Re-enter password.
+P4 super-user password:
+```
