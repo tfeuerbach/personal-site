@@ -14,11 +14,12 @@ module.exports = {
     siteUrl: `https://tfeuerbach.dev`,
     siteDescription: `Thomas Feuerbach's personal website for programming, projects, and interesting things.`,
     siteImage: `/banner.jpg`,
-    siteLanguage: `en`, // Added from new config
+    siteLanguage: `en`,
     author: `Thomas Feuerbach`,
   },
-  trailingSlash: `always`, // Merged this from the new config
+  trailingSlash: `always`,
   plugins: [
+    `gatsby-plugin-image`,
     {
       resolve: `gatsby-plugin-decap-cms`,
       options: {
