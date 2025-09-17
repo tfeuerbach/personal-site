@@ -45,6 +45,7 @@ module.exports = {
           { name: `LinkedIn`, url: `https://linkedin.com/in/tfeuerbach` },
           { name: `YouTube`, url: `https://youtube.com/@tfeuerbach` },
 	  { name: `Photography`, url: `https://photos.tfeuerbach.dev/`},
+          { name: `RSS`, url: `/rss.xml` },
         ],
       },
     },
