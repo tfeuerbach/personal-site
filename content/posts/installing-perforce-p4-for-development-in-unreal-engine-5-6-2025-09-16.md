@@ -313,4 +313,4 @@ My guys and I are going to be running on Windows machines so that is the OS I'm 
 It will then ask for your server's IP address, the name of your super-user, and then the text editing application you'd like to default to. In my case, since I'm on the same network as my server, I can use the server's network IP that I get from `ip a` OR I can use the Tailscale assigned IP.
 \[p4vinstaller2 image]
 
-For my buddies, they'll want to input my machines Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.
+For my buddies, they'll want to input my machine's Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.
