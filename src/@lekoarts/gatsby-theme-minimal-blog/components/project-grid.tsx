@@ -3,9 +3,11 @@ import { jsx, Box, Heading, Text } from 'theme-ui'
 import * as React from 'react'
 import { useState } from 'react'
 import { useStaticQuery, graphql } from 'gatsby'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 
 const ProjectCard = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false)
+  const image = getImage(project.image)
 
   return (
     <a
@@ -29,8 +31,8 @@ const ProjectCard = ({ project }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <img
-        src={project.image}
+      <GatsbyImage
+        image={image}
         alt={project.title}
         sx={{
           width: '100%',
@@ -96,14 +98,18 @@ const ProjectGrid = () => {
             title
             description
             link
-            image
+            image {
+              childImageSharp {
+                gatsbyImageData(width: 800, placeholder: BLURRED, formats: [AUTO, WEBP, AVIF])
+              }
+            }
           }
         }
       }
     }
   `)
 
-  const projects = data.allMarkdownRemark.nodes.map(node => node.frontmatter)
+  const projects = data.allMarkdownRemark.nodes.map((node) => node.frontmatter)
 
   return (
     <Box

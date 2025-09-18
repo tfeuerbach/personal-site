@@ -11,7 +11,9 @@ import replaceSlashes from "@lekoarts/gatsby-theme-minimal-blog/src/utils/replac
 import { visuallyHidden } from "@lekoarts/gatsby-theme-minimal-blog/src/styles/utils"
 import Seo from "@lekoarts/gatsby-theme-minimal-blog/src/components/seo"
 import Hero from "@lekoarts/gatsby-theme-minimal-blog/src/texts/hero.mdx"
-import Bottom from "@lekoarts/gatsby-theme-minimal-blog/src/texts/bottom.mdx"
+import ProjectGrid from "./project-grid"
+
+const projectsPath = `/projects`
 
 export type MBHomepageProps = {
   posts: {
@@ -43,7 +45,10 @@ const Homepage = ({ posts }: MBHomepageProps) => {
       </Title>
       <Listing posts={posts} showTags={true} />
       <List>
-        <Bottom />
+        <Title text="Projects">
+          <Link to={replaceSlashes(`/${basePath}${projectsPath}`)}>See all projects</Link>
+        </Title>
+        <ProjectGrid />
       </List>
     </Layout>
   )
