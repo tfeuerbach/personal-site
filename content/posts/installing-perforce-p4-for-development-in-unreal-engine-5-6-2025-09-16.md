@@ -299,17 +299,18 @@ Re-enter password.
 P4 super-user password:
 ```
 
-
-Once this finishes your server will be up and running and it is now possible to connect using the client tools.
+Once this finishes your server will be up and running and it is now possible to connect using the client tools. At this point, we're at Step 3 of the Perforce P4 (helix-core) installation documentation. \
+\
+As we continue getting this set up, it's important to ensure the system(s) are kept secure and up to standards with what is considered best-practice. Definitely keep this in the pocket: [Perforce P4 Security Documentation](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/chapter.security.html)
 
 - - -
 
 # Installing P4V and Other Client Tools
 
-My clients are going to be running on Windows machines so that is the OS I'm installing the tools for. On the [P4V downloads page](https://portal.perforce.com/s/downloads?product=Helix%20Visual%20Client%20%28P4V%29), I select the Windows family and download the .exe installer (*p4vinst64.exe*). Run the installer and download all available tools.
-    [p4vinstaller image]
+My guys and I are going to be running on Windows machines so that is the OS I'm installing the tools for. On the [P4V downloads page](https://portal.perforce.com/s/downloads?product=Helix%20Visual%20Client%20%28P4V%29), I select the Windows family and download the .exe installer (*p4vinst64.exe*). Run the installer and download all available tools.
+    \[p4vinstaller image]
 
 It will then ask for your server's IP address, the name of your super-user, and then the text editing application you'd like to default to. In my case, since I'm on the same network as my server, I can use the server's network IP that I get from `ip a` OR I can use the Tailscale assigned IP.
-[p4vinstaller2 image]
+\[p4vinstaller2 image]
 
 For my buddies, they'll want to input my machines Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.
