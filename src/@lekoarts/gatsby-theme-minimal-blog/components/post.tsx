@@ -6,6 +6,7 @@ import Layout from "./layout"
 import ItemTags from "./item-tags"
 import Seo from "./seo"
 import PostFooter from "./post-footer"
+import { graphql } from "gatsby"
 
 export type MBPostProps = {
   post: {
@@ -20,6 +21,7 @@ export type MBPostProps = {
     canonicalUrl?: string
     excerpt: string
     timeToRead?: number
+    image?: string
     banner?: {
       childImageSharp: {
         resize: {
@@ -75,8 +77,34 @@ export const Head: HeadFC<MBPostProps> = ({ data: { post } }) => (
   <Seo
     title={post.title}
     description={post.description ? post.description : post.excerpt}
-    image={post.banner ? post.banner?.childImageSharp?.resize?.src : undefined}
+    image={post.image ? post.image : post.banner?.childImageSharp?.resize?.src}
     pathname={post.slug}
     canonicalUrl={post.canonicalUrl}
   />
 )
+
+export const query = graphql`
+  query ($slug: String!) {
+    post(slug: { eq: $slug }) {
+      slug
+      title
+      date(formatString: "YYYY-MM-DD")
+      tags {
+        name
+        slug
+      }
+      description
+      canonicalUrl
+      excerpt(pruneLength: 140)
+      timeToRead
+      image
+      banner {
+        childImageSharp {
+          resize(width: 1200, quality: 90) {
+            src
+          }
+        }
+      }
+    }
+  }
+`
