@@ -313,9 +313,14 @@ It will then ask for your server's IP address, the name of your super-user, and 
 
 For my buddies, they'll want to input my machine's Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.\
 \
-One thing to note here when connecting is that you must provide your server IP as such: `ssl:ipaddress:port`.\
+One thing to note here when connecting is that you must provide your server IP as such due to the options configured during install: `ssl:ipaddress:port`. \
 \
-\[ssl images]
+Below is what you would see if you do not follow that format (though if you do not require SSL on install, this is not the case).\
+
+<div style={{ textAlign: 'center' }}>
+  <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1758304297/OpenConnectionNoSSL.png" alt="no-ssl" />
+</div>
+
 
 - - -
 
