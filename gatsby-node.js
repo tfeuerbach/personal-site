@@ -1,17 +1,17 @@
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions
   const typeDefs = `
-    type Post implements Node {
-      title: String!
-      date: Date! @dateformat
-      tags: [String]
-      description: String
-      canonicalUrl: String
-      excerpt: String
-      timeToRead: Int
-      slug: String!
+    type Mdx implements Node {
+      frontmatter: MdxFrontmatter
+    }
+    type MdxFrontmatter {
       image: String
-      banner: File @fileByRelativePath
+    }
+    type MarkdownRemark implements Node {
+      frontmatter: MarkdownRemarkFrontmatter
+    }
+    type MarkdownRemarkFrontmatter {
+      image_external: String
     }
   `
   createTypes(typeDefs)
