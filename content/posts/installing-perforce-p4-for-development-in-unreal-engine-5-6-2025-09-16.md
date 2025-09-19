@@ -148,7 +148,7 @@ UUID=1c71978f-5874-4661-8e18-31386a98e7df /boot ext4 defaults 0 1
 # New LVM Logical Volumes for OS and Perforce metadata
 /dev/mapper/vg_os-root_lv / ext4 noatime,defaults 0 1
 /dev/mapper/vg_os-swap_lv none swap sw 0 0
-/dev/mapper/vg_os-p4root_lv /p4/root ext4 noatime,defaults 0 2
+/dev/mapper/vg_os-p4root_lv /p4/P4ROOT ext4 noatime,defaults 0 2
 
 # New LVM Logical Volume for Perforce depots
 /dev/mapper/vg_depot-depot_lv /p4/depot xfs noatime,defaults 0 2
@@ -275,7 +275,7 @@ Unicode mode        [(not specified)]
 Case-sensitive      [(not specified)]
 
 For a list of other options, type Ctrl-C to exit, and then run:
-$ sudo /opt/perforce/sbin/configure-helix-p4d.sh --help
+$ sudo /opt/perforce/sbin/configure-p4d.sh --help
 
 
 You have entered interactive configuration for p4d. This script
@@ -289,7 +289,7 @@ Please provide the following details about your desired P4 environment:
 
 P4 Service name [master]: dalaran
 Service dalaran not found. Creating...
-P4 Server root (P4ROOT) [/opt/perforce/servers/dalaran]: /p4/root
+P4 Server root (P4ROOT) [/opt/perforce/servers/dalaran]: /p4/P4ROOT
 {P4} Server unicode-mode (y/n) [n]: n
 P4 Server case-sensitive (y/n) [y]: y
 P4 Server address (P4PORT) [ssl:1666]:
