@@ -223,15 +223,15 @@ I then apply the changes, `sudo sysctl -p /etc/sysctl.d/99-perforce.conf`.
 
 - - -
 
-# Installing Perforce P4 Server
+# Installing Perforce P4 Server 2025.1
 
-Perforce documentation on installing P4 on Linux can be found [here](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-install-linux.html). The following is my attempt at supplementing their documentation with an anecdotal guide that I would have liked to have when doing this myself. For certain steps, I'll be brief as there are some areas in the documentation that don't require any further explanation and *I'm making the assumption that readers have experience working with Ubuntu or any other Debian-based distro*.
+Perforce documentation on installing P4 on Linux can be found [here](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/Home-p4sag.html). The following is my attempt at supplementing their documentation with an anecdotal guide that I would have liked to have when doing this myself. For certain steps, I'll be brief as there are some areas in the documentation that don't require any further explanation and *I'm making the assumption that readers have experience working with Ubuntu or any other Debian-based distro*.
 
 **TL;DR - This is not a total replacement for Perforce's documentation/guide. Supplement this post with their instructions.**
 
 ## Configuring the Repo
 
-If you're unfamiliar with adding external/non-default Linux repo's to your distribution, I highly encourage you to read [this guide](https://documentation.ubuntu.com/server/explanation/software/third-party-repository-usage/) instead of blindly following the guide. I believe that understanding how and why we do the following is **crucial** to being a responsible and capable Linux admin.
+If you're unfamiliar with adding external/non-default Linux repo's to your distribution, I highly encourage you to read [this guide](https://documentation.ubuntu.com/server/explanation/software/third-party-repository-usage/) instead of blindly following these instructions. Understanding how and why we do the following is **crucial** to being a responsible Linux admin, even if you're just cosplaying SysAdmin at home.
 
 1. Download and verify Perforce's public key
 
