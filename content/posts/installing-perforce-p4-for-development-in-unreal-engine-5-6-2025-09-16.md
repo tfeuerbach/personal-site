@@ -255,14 +255,14 @@ If you're unfamiliar with adding external/non-default Linux repo's to your distr
 
 ## Downloading and Installing P4 Server
 
-When we run `sudo apt install helix-p4d` we're downloading P4 Server (p4d) and P4 CLI Client (p4) along with their dependencies like `p4dctl`, `p4-server-base`, `p4-cli-base`, etc.
+When we run `sudo apt install p4-server` we're downloading P4 Server (p4d) and P4 CLI Client (p4) along with their dependencies like `p4dctl`, `p4-server-base`, `p4-cli-base`, etc.
 
-Once that installs it'll be located in `/opt/perforce/` and from there you just need to do a `sudo chmod +x /opt/perforce/sbin/configure-*` to ensure the scripts are executable and then run `sudo /opt/perforce/sbin/configure-helix-p4d.sh`.\
+Once that installs it'll be located in `/opt/perforce/` and from there you just need to do a `sudo chmod +x /opt/perforce/sbin/configure-*` to ensure the scripts are executable and then run `sudo /opt/perforce/sbin/configure-p4d.sh`.\
 \
 **Note:** For fields where there's no visible response from me, that's because I'm taking the default value that exists within the `[brackets]`.
 
 ```
-tfeuerbach@perforce-nexus:~$ sudo /opt/perforce/sbin/configure-helix-p4d.sh
+tfeuerbach@perforce-nexus:~$ sudo /opt/perforce/sbin/configure-p4d.sh
 
 Summary of arguments passed:
 
