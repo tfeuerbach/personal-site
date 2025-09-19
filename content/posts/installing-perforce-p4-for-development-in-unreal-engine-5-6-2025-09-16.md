@@ -164,8 +164,8 @@ UUID=1c71978f-5874-4661-8e18-31386a98e7df /boot ext4 defaults 0 1
 update-initramfs -u -k all
 ```
 
-**Note:** You can ignore the message that `systemd` still uses the old version of your fstab. `systemctl daemon-reload` isn't necessary here as the change to the `fstab` will be picked up when we reboot anyway.\
-\
+**Note:** You can ignore the message that `systemd` still uses the old version of your fstab. `systemctl daemon-reload` isn't necessary here as the change to the `fstab` will be picked up when we reboot anyway.
+
 **Update GRUB config:**
 
 ```
@@ -257,8 +257,8 @@ If you're unfamiliar with adding external/non-default Linux repo's to your distr
 
 When we run `sudo apt install p4-server` we're downloading P4 Server (p4d) and P4 CLI Client (p4) along with their dependencies like `p4dctl`, `p4-server-base`, `p4-cli-base`, etc.
 
-Once that installs it'll be located in `/opt/perforce/` and from there you just need to do a `sudo chmod +x /opt/perforce/sbin/configure-*` to ensure the scripts are executable and then run `sudo /opt/perforce/sbin/configure-p4d.sh`.\
-\
+Once that installs it'll be located in `/opt/perforce/` and from there you just need to do a `sudo chmod +x /opt/perforce/sbin/configure-*` to ensure the scripts are executable and then run `sudo /opt/perforce/sbin/configure-p4d.sh`.
+
 **Note:** For fields where there's no visible response from me, that's because I'm taking the default value that exists within the `[brackets]`.
 
 ```
@@ -306,19 +306,21 @@ Once this finishes your server will be up and running and it is now possible to 
 # Installing P4V and Other Client Tools
 
 My guys and I are going to be running on Windows machines so that is the OS I'm installing the tools for. On the [P4V downloads page](https://portal.perforce.com/s/downloads?product=Helix%20Visual%20Client%20%28P4V%29), I select the Windows family and download the .exe installer (*p4vinst64.exe*). Run the installer and download all available tools.
-    \[p4vinstaller image]
+    [p4vinstaller image]
 
 It will then ask for your server's IP address, the name of your super-user, and then the text editing application you'd like to default to. In my case, since I'm on the same network as my server, I can use the server's network IP that I get from `ip a` OR I can use the Tailscale assigned IP.
-\[p4vinstaller2 image]
+[p4vinstaller2 image]
 
-For my buddies, they'll want to input my machine's Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.\
-\
-One thing to note here when connecting is that you must provide your server IP as such due to the options configured during install: `ssl:ipaddress:port`. \
-\
-Below is what you would see if you do not follow that format (though if you do not require SSL on install, this is not the case).\
+For my buddies, they'll want to input my machine's Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.
+
+One thing to note here when connecting is that you must provide your server IP as such due to the options configured during install: `ssl:ipaddress:port`.
+
+Below is what you would see if you do not follow that format (though if you do not require SSL on install, this is not the case).
 
 <div style={{ textAlign: 'center' }}>
-  <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1758304297/OpenConnectionNoSSL.png" alt="no-ssl" />
+
+  <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1758304297/OpenConnectionNoSSL.png" alt="no-ssl" width="75%" />
+
 </div>
 
 
@@ -326,10 +328,10 @@ Below is what you would see if you do not follow that format (though if you do n
 
 # [Securing the Server](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/chapter.security.html)[](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/chapter.security.html)
 
-With the server running and the client applications installed, we can verify we have a basic level of security configured from within P4Admin by going to the "Configurables" tab at the top.\
-\
-\[p4adminconfig]\
-\
+With the server running and the client applications installed, we can verify we have a basic level of security configured from within P4Admin by going to the "Configurables" tab at the top.
+
+[p4adminconfig]
+
 Perforce's server admin documentation could be a little more robust here. They rightfully assume the typical P4 Server admin has enough background to get started with the recommendations and commands they provide using p4-cli, but pretty much ignore the fact that you can also configure from the client tool P4Admin. It's definitely easier to make these changes in the GUI so that's what I'll be doing as there's really no guide online for that.
 
 For now, you can assume all security variables I'm modifying are done from within the "Configurables" tab in P4Admin.
