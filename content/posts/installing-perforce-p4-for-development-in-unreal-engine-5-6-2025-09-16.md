@@ -253,7 +253,7 @@ If you're unfamiliar with adding external/non-default Linux repo's to your distr
      ```
    * `sudo vi /etc/apt/sources.list.d/perforce.list` to create and edit the repo file with this line: `deb [signed-by=/usr/share/keyrings/perforce.gpg] https://package.perforce.com/apt/ubuntu noble release`
 
-## Downloading and Installing P4 Server
+## [Downloading and Installing P4 Server](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/install.linux.packages.install.html)
 
 When we run `sudo apt install p4-server` we're downloading P4 Server (p4d) and P4 CLI Client (p4) along with their dependencies like `p4dctl`, `p4-server-base`, `p4-cli-base`, etc.
 
