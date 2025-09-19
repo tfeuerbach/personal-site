@@ -8,6 +8,7 @@ import { GatsbyImage, getImage } from 'gatsby-plugin-image'
 const ProjectCard = ({ project }) => {
   const [isHovered, setIsHovered] = useState(false)
   const image = getImage(project.image)
+  const externalImage = project.image_external
 
   return (
     <a
@@ -31,17 +32,31 @@ const ProjectCard = ({ project }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <GatsbyImage
-        image={image}
-        alt={project.title}
-        sx={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          transition: 'filter 0.3s ease',
-          filter: isHovered ? 'brightness(0.4)' : 'brightness(0.85)',
-        }}
-      />
+      {image ? (
+        <GatsbyImage
+          image={image}
+          alt={project.title}
+          sx={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transition: 'filter 0.3s ease',
+            filter: isHovered ? 'brightness(0.4)' : 'brightness(0.85)',
+          }}
+        />
+      ) : (
+        <img
+          src={externalImage}
+          alt={project.title}
+          sx={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transition: 'filter 0.3s ease',
+            filter: isHovered ? 'brightness(0.4)' : 'brightness(0.85)',
+          }}
+        />
+      )}
       <Box
         sx={{
           position: 'absolute',
@@ -98,6 +113,7 @@ const ProjectGrid = () => {
             title
             description
             link
+            image_external
             image {
               childImageSharp {
                 gatsbyImageData(width: 800, placeholder: BLURRED, formats: [AUTO, WEBP, AVIF])
