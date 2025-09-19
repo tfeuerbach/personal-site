@@ -299,9 +299,7 @@ Re-enter password.
 P4 super-user password:
 ```
 
-Once this finishes your server will be up and running and it is now possible to connect using the client tools. At this point, we're at Step 3 of the Perforce P4 (helix-core) installation documentation. \
-\
-As we continue getting this set up, it's important to ensure the system(s) are kept secure and up to standards with what is considered best-practice. Definitely keep this in the pocket: [Perforce P4 Security Documentation](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/chapter.security.html)
+Once this finishes your server will be up and running and it is now possible to connect using the client tools. 
 
 - - -
 
@@ -313,4 +311,20 @@ My guys and I are going to be running on Windows machines so that is the OS I'm 
 It will then ask for your server's IP address, the name of your super-user, and then the text editing application you'd like to default to. In my case, since I'm on the same network as my server, I can use the server's network IP that I get from `ip a` OR I can use the Tailscale assigned IP.
 \[p4vinstaller2 image]
 
-For my buddies, they'll want to input my machine's Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.
+For my buddies, they'll want to input my machine's Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.\
+\
+One thing to note here when connecting is that you must provide your server IP as such: `ssl:ipaddress:port`.\
+\
+\[ssl images]
+
+- - -
+
+# [Securing the Server](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/chapter.security.html)[](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/chapter.security.html)
+
+With the server running and the client applications installed, we can verify we have a basic level of security configured from within P4Admin by going to the "Configurables" tab at the top.\
+\
+\[p4adminconfig]\
+\
+Perforce's server admin documentation could be a little more robust here. They rightfully assume the typical P4 Server admin has enough background to get started with the recommendations and commands they provide using p4-cli, but pretty much ignore the fact that you can also configure from the client tool P4Admin. It's definitely easier to make these changes in the GUI so that's what I'll be doing as there's really no guide online for that.
+
+For now, you can assume all security variables I'm modifying are done from within the "Configurables" tab in P4Admin.
