@@ -306,10 +306,10 @@ Once this finishes your server will be up and running and it is now possible to 
 # Installing P4V and Other Client Tools
 
 My guys and I are going to be running on Windows machines so that is the OS I'm installing the tools for. On the [P4V downloads page](https://portal.perforce.com/s/downloads?product=Helix%20Visual%20Client%20%28P4V%29), I select the Windows family and download the .exe installer (*p4vinst64.exe*). Run the installer and download all available tools.
-    [p4vinstaller image]
+    \[p4vinstaller image]
 
 It will then ask for your server's IP address, the name of your super-user, and then the text editing application you'd like to default to. In my case, since I'm on the same network as my server, I can use the server's network IP that I get from `ip a` OR I can use the Tailscale assigned IP.
-[p4vinstaller2 image]
+\[p4vinstaller2 image]
 
 For my buddies, they'll want to input my machine's Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.
 
@@ -318,11 +318,10 @@ One thing to note here when connecting is that you must provide your server IP a
 Below is what you would see if you do not follow that format (though if you do not require SSL on install, this is not the case).
 
 <div style={{ textAlign: 'center' }}>
-
-  <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1758304297/OpenConnectionNoSSL.png" alt="no-ssl" width="75%" />
-
+  <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1758304297/OpenConnectionNoSSL.png" alt="no-ssl" width="60%" />
 </div>
 
+To make the above connection work, the server address is `ssl:100.103.240.70:1666`.
 
 - - -
 
@@ -330,8 +329,24 @@ Below is what you would see if you do not follow that format (though if you do n
 
 With the server running and the client applications installed, we can verify we have a basic level of security configured from within P4Admin by going to the "Configurables" tab at the top.
 
-[p4adminconfig]
+\[p4adminconfig]
 
-Perforce's server admin documentation could be a little more robust here. They rightfully assume the typical P4 Server admin has enough background to get started with the recommendations and commands they provide using p4-cli, but pretty much ignore the fact that you can also configure from the client tool P4Admin. It's definitely easier to make these changes in the GUI so that's what I'll be doing as there's really no guide online for that.
+Perforce's server admin documentation could be a little more robust here. They assume the typical administrator has enough background to get started with the rec's and commands they provide but don't acknowledge that you could do it all from within P4Admin (*way easier*).
 
-For now, you can assume all security variables I'm modifying are done from within the "Configurables" tab in P4Admin.
+For now, you can assume all modifications are done from within the "Configurables" tab in P4Admin. The table below can be found in the documentation and should be considered the **minimum** standard for a secure P4 Server.
+
+
+| Purpose | Configurable | Value |
+| --- | --- | --- |
+| Require ticket-based authentication. To help protect systems and data, specify a value of at least 4. This level of protection is particularly important in multi-server and replicated environments. The setting helps to ensure that only authenticated service users can connect to the server. The setting also requires server specs for all replicas. For successful configuration at various levels, carefully consider the details in the Server behavior column at Server security levels. | `security` | `4` or higher |
+| Ensure that only users with the super access level, and whose password is already set, can set the initial password for other users. All users can reset their own password after logging in with an initial password set by a super user. | `dm.user.setinitialpasswd` | `0` |
+| Ensure that only a user with the super access level can create a user, and that the super user does so by explicitly running the `p4 user -f username` command. | `dm.user.noautocreate` | `2` |
+| Force new users that have been created by a super user to reset their passwords. | `dm.user.resetpassword` | `1` |
+| Hide sensitive information from unauthorized users of `p4 info`. | `dm.info.hide` | `1` |
+| Hide user details from unauthenticated users. | `run.users.authorize` | `1` |
+| If authentication fails because of an incorrect username, hide the reason for the failure. | `dm.user.hideinvalid` | `1` |
+| Hide information in key/value pairs used in scripts from those who lack admin access. One use case is hiding P4 Code Review storage from regular users. | `dm.keys.hide` | `2` |
+| Prevent a server from being used as a P4AUTH server without deliberate configuration. | `server.rolechecks` | `1` |
+
+
+
