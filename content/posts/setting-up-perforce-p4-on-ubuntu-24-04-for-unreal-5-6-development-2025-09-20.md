@@ -325,27 +325,36 @@ To make the above connection work, the server address is `ssl:100.103.240.70:166
 
 - - -
 
-# [Securing the Server](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/chapter.security.html)[](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/chapter.security.html)
+# [Securing the Server](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/chapter.security.html)
 
 With the server running and the client applications installed, we can verify we have a basic level of security configured from within P4Admin by going to the "Configurables" tab at the top.
 
 \[p4adminconfig]
 
-Perforce's server admin documentation could be a little more robust here. They assume the typical administrator has enough background to get started with the rec's and commands they provide but don't acknowledge that you could do it all from within P4Admin (*way easier*).
+Perforce's server admin documentation could be a little more robust here. They assume the administrator has enough background to get started with their recommendations and commands in their docs but don't acknowledge that you could do it all from within P4Admin (*way easier*).
 
-For now, you can assume all modifications are done from within the "Configurables" tab in P4Admin. The table below can be found in the documentation and should be considered the **minimum** standard for a secure P4 Server.
+For now, you can assume all modifications are done from within the "Configurables" tab in P4Admin. The table below can be found in the documentation and should be considered the **minimum** values for a secure P4 Server.
+
+| Purpose                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Configurable               | Value         |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | ------------- |
+| Require ticket-based authentication. To help protect systems and data, specify a value of at least 4. This level of protection is particularly important in multi-server and replicated environments. The setting helps to ensure that only authenticated service users can connect to the server. The setting also requires server specs for all replicas. For successful configuration at various levels, carefully consider the details in the Server behavior column at Server security levels. | `security`                 | `4` or higher |
+| Ensure that only users with the super access level, and whose password is already set, can set the initial password for other users. All users can reset their own password after logging in with an initial password set by a super user.                                                                                                                                                                                                                                                          | `dm.user.setinitialpasswd` | `0`           |
+| Ensure that only a user with the super access level can create a user, and that the super user does so by explicitly running the `p4 user -f username` command.                                                                                                                                                                                                                                                                                                                                     | `dm.user.noautocreate`     | `2`           |
+| Force new users that have been created by a super user to reset their passwords.                                                                                                                                                                                                                                                                                                                                                                                                                    | `dm.user.resetpassword`    | `1`           |
+| Hide sensitive information from unauthorized users of `p4 info`.                                                                                                                                                                                                                                                                                                                                                                                                                                    | `dm.info.hide`             | `1`           |
+| Hide user details from unauthenticated users.                                                                                                                                                                                                                                                                                                                                                                                                                                                       | `run.users.authorize`      | `1`           |
+| If authentication fails because of an incorrect username, hide the reason for the failure.                                                                                                                                                                                                                                                                                                                                                                                                          | `dm.user.hideinvalid`      | `1`           |
+| Hide information in key/value pairs used in scripts from those who lack admin access. One use case is hiding P4 Code Review storage from regular users.                                                                                                                                                                                                                                                                                                                                             | `dm.keys.hide`             | `2`           |
+| Prevent a server from being used as a P4AUTH server without deliberate configuration.                                                                                                                                                                                                                                                                                                                                                                                                               | `server.rolechecks`        | `1`           |
 
 
-| Purpose | Configurable | Value |
-| --- | --- | --- |
-| Require ticket-based authentication. To help protect systems and data, specify a value of at least 4. This level of protection is particularly important in multi-server and replicated environments. The setting helps to ensure that only authenticated service users can connect to the server. The setting also requires server specs for all replicas. For successful configuration at various levels, carefully consider the details in the Server behavior column at Server security levels. | `security` | `4` or higher |
-| Ensure that only users with the super access level, and whose password is already set, can set the initial password for other users. All users can reset their own password after logging in with an initial password set by a super user. | `dm.user.setinitialpasswd` | `0` |
-| Ensure that only a user with the super access level can create a user, and that the super user does so by explicitly running the `p4 user -f username` command. | `dm.user.noautocreate` | `2` |
-| Force new users that have been created by a super user to reset their passwords. | `dm.user.resetpassword` | `1` |
-| Hide sensitive information from unauthorized users of `p4 info`. | `dm.info.hide` | `1` |
-| Hide user details from unauthenticated users. | `run.users.authorize` | `1` |
-| If authentication fails because of an incorrect username, hide the reason for the failure. | `dm.user.hideinvalid` | `1` |
-| Hide information in key/value pairs used in scripts from those who lack admin access. One use case is hiding P4 Code Review storage from regular users. | `dm.keys.hide` | `2` |
-| Prevent a server from being used as a P4AUTH server without deliberate configuration. | `server.rolechecks` | `1` |
 
+**Note:** The values in this table are not necessarily the "default" values when P4 installs. For example, `dm.user.setinitialpasswd` defaults to `1`.
 
+\[setinitpasswd.png]
+
+If you're set up is similar to mine (using Tailscale) then there's certain considerations you can safely "ignore" provided you know who is on your Tailnet and you trust them. With that said, I went ahead and matched my configuration to the values in the above table anyway. There's a lot of documentation on securing the server alone but the above table provides a good starting point.
+
+- - -
+
+# [Configuring Typemap Settings](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-typemap.html)
