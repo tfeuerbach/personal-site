@@ -1,5 +1,5 @@
 ---
-title: Loading Your Satisfactory Server Save Remotely on the Interactive Map
+title: Loading Your Satisfactory Server Save Remotely on the Interactive Map (Linux)
 date: 2025-10-05T20:31:00.000-04:00
 ---
 I recently spun up a Satisfactory 1.1 server on my Home Lab with some buddies and we wanted a better way to see our factory and the map. The [Satisfactory Calculator Interactive Map](https://satisfactory-calculator.com/en/interactive-map) is perfect for this and it supports remote save loading—you give it a URL to your save file and it loads directly.
@@ -14,7 +14,7 @@ The caveat is that you need to serve those files over HTTPS with CORS headers. W
 
 ## The Setup
 
-I'm running my Satisfactory server via Pterodactyl Panel on a box (a part of a cluster of Lenovo M710q's) at `192.168.1.151` in my local network. Pterodactyl uses Docker containers spun up from [.egg files](https://github.com/GreenChiip/satisfatory-egg) (in my case, the [Satisfactory 1.1 egg](https://github.com/GreenChiip/satisfatory-egg)). Your setup might be different—maybe you're running the official dedicated server as a `steam` user, or you've got a standalone Docker container. I'll cover the common scenarios, but the core concepts are the same regardless.
+I'm running my Satisfactory server via Pterodactyl Panel on a box (a part of a cluster of Lenovo M710q's) at `192.168.1.151` in my local network. Pterodactyl uses Docker containers spun up from .egg (in my case, the [Satisfactory 1.1 egg](https://github.com/GreenChiip/satisfatory-egg)). Your setup might be different—maybe you're running the official dedicated server as the `steam` user, or you've got a standalone Docker container. I'll cover the common scenarios, but the core concepts are the same regardless.
 
 - - -
 
