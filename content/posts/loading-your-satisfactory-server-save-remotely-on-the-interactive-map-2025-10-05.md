@@ -30,12 +30,12 @@ The good news is you don't need to buy one. Free dynamic DNS services like DuckD
 
 I went with [DuckDNS](https://www.duckdns.org/) because it's simple and free forever. Here's what you do:
 
-1. Go to <https://www.duckdns.org/>
+1. Go to https://www.duckdns.org/
 2. Sign in with GitHub, Google, Reddit, or whatever account you prefer
 3. Create a subdomain (I went with `satisfactory-boys.duckdns.org` because, well, that's what we call ourselves I guess)
 4. Set the IP to your **public IP address** (not your server's local IP like `192.168.1.151`)
 
-   * Find your public IP at <https://whatismyipaddress.com/>
+   * Find your public IP at https://whatismyipaddress.com/
 5. Click "update ip"
 
 **Note:** If your ISP gives you a dynamic IP that changes frequently (most residential connections do), you'll want to [set up automatic updates](#dynamic-ip-changes) so DuckDNS always points to your current IP. I highly recommend doing this right after Step 5.
@@ -499,7 +499,7 @@ ls -lh /path/to/your/SaveGames/server/
 
 If your ISP changes your public IP frequently, set up automatic DuckDNS updates. This ensures your domain always points to your current IP even if it changes.
 
-**Get your DuckDNS token:** Go to <https://www.duckdns.org/> (while logged in) and copy the token shown at the top of the page.
+**Get your DuckDNS token:** Go to https://www.duckdns.org/ (while logged in) and copy the token shown at the top of the page.
 
 **Create the update script:**
 
