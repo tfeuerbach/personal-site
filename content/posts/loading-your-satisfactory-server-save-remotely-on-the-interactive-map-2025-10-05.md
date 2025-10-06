@@ -144,7 +144,7 @@ You should see `Active: active (running)` in green. If not, start it with `sudo 
 
 ## Step 5: Getting an SSL Certificate
 
-This is where the magic happens. Let's Encrypt provides free SSL certificates via certbot, and it's almost too easy:
+This is where the magic happens. Let's Encrypt provides free SSL certificates via certbot which makes this super easy.
 
 ```bash
 sudo certbot certonly --nginx -d your-domain.duckdns.org
