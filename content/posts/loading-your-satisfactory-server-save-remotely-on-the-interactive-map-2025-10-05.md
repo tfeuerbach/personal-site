@@ -1,6 +1,6 @@
 ---
 title: Loading Your Satisfactory Server Save Remotely on the Interactive Map
-date: 2025-10-05T17:26:00.000-04:00
+date: 2025-10-05T20:31:00.000-04:00
 ---
 I recently spun up a Satisfactory 1.1 server on my homelab with some boys and we wanted a better way to see our factory and the map. The [Satisfactory Calculator Interactive Map](https://satisfactory-calculator.com/en/interactive-map) is perfect for this and it supports remote save loading—you give it a URL to your save file and it loads directly.
 
