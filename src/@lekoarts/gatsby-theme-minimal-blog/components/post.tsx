@@ -12,6 +12,7 @@ export type MBPostProps = {
     slug: string
     title: string
     date: string
+    dateISO?: string
     tags?: {
       name: string
       slug: string
@@ -78,5 +79,8 @@ export const Head: HeadFC<MBPostProps> = ({ data: { post } }) => (
     image={post.banner ? post.banner?.childImageSharp?.resize?.src : undefined}
     pathname={post.slug}
     canonicalUrl={post.canonicalUrl}
+    type="article"
+    datePublished={post.dateISO || post.date}
+    tags={post.tags?.map((tag) => tag.name) || []}
   />
 )

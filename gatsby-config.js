@@ -59,6 +59,14 @@ module.exports = {
       options: { output: `/` },
     },
     {
+      resolve: `gatsby-plugin-robots-txt`,
+      options: {
+        host: `https://tfeuerbach.dev`,
+        sitemap: `https://tfeuerbach.dev/sitemap-index.xml`,
+        policy: [{ userAgent: `*`, allow: `/` }],
+      },
+    },
+    {
       resolve: `gatsby-plugin-manifest`,
       options: {
         name: `tfeuerbach - Thomas Feuerbach's Personal Page`,
