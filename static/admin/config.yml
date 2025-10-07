@@ -19,6 +19,8 @@ collections:
     slug: "{{slug}}-{{year}}-{{month}}-{{day}}"
     fields:
       - {label: "Title", name: "title", widget: "string"}
+      - {label: "Meta Description", name: "description", widget: "text", required: false, hint: "SEO description (150-160 characters). Shows in Google search results."}
+      - {label: "Excerpt", name: "excerpt", widget: "text", required: false, hint: "Short summary for post previews and RSS feed (1-2 sentences)."}
       - {label: "Publish Date", name: "date", widget: "datetime"}
       - {label: "Image", name: "image", required: false, widget: "image"}
       - {label: "Body", name: "body", widget: "markdown"}
