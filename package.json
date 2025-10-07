@@ -26,7 +26,6 @@
     "decap-cms-lib-util": "^3.3.1",
     "decap-cms-media-library-cloudinary": "^3.1.0",
     "gatsby": "^5.15.0",
-    "gatsby-cli": "^1.0.12",
     "gatsby-plugin-decap-cms": "^4.0.4",
     "gatsby-plugin-feed": "^5.15.0",
     "gatsby-plugin-google-gtag": "^5.15.0",
