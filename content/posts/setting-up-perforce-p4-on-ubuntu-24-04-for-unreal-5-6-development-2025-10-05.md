@@ -347,8 +347,6 @@ For now, you can assume all modifications are done from within the "Configurable
 | Hide information in key/value pairs used in scripts from those who lack admin access. One use case is hiding P4 Code Review storage from regular users.                                                                                                                                                                                                                                                                                                                                             | `dm.keys.hide`             | `2`           |
 | Prevent a server from being used as a P4AUTH server without deliberate configuration.                                                                                                                                                                                                                                                                                                                                                                                                               | `server.rolechecks`        | `1`           |
 
-
-
 **Note:** The values in this table are not necessarily the "default" values when P4 installs. For example, `dm.user.setinitialpasswd` defaults to `1`.
 
 \[setinitpasswd.png]
@@ -359,4 +357,6 @@ If you're set up is similar to mine (using Tailscale) then there's certain consi
 
 # [Configuring Typemap Settings](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-typemap.html)
 
-P4 attempts to detect if files should be stored as text or binary data, and sets all files to read-only until you check them out. We set up a typemap to tell Perforce how to handle certain file extensions and what to do with them. A typemap can also let you limit the number of versions of a file stored on the server, which saves server space.
+P4 attempts to detect if files should be stored as text or binary data, and sets all files to read-only until you check them out. Setting up a typemap tells Perforce what to do for the various files it encounters. For example, in our case (working in Unreal w/ Blueprints), we want to make sure we enable file-locking for .uasset files so that we don't have any conflicts we can't easily reconcile. A typemap can also let you limit the number of versions of a file stored on the server, which saves server space.
+
+For my installation I just used the ["Universal Game Engine Typemap"](https://gist.github.com/jase-perf/3f6328fb66427802090f458775e481df). It's definitely overkill as it has lines for Unity and Godot but that's okay. On the server, `p4 typemap` opens up the default typemap in vim. Simply copy in your typemap settings and save it like you would any other document and you should see `Typemap saved.`
