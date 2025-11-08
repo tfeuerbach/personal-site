@@ -358,3 +358,5 @@ If you're set up is similar to mine (using Tailscale) then there's certain consi
 - - -
 
 # [Configuring Typemap Settings](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-typemap.html)
+
+P4 attempts to detect if files should be stored as text or binary data, and sets all files to read-only until you check them out. We set up a typemap to tell Perforce how to handle certain file extensions and what to do with them. A typemap can also let you limit the number of versions of a file stored on the server, which saves server space.
