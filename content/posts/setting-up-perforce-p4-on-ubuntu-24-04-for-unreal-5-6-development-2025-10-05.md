@@ -329,7 +329,7 @@ To make the above connection work, the server address is `ssl:100.103.240.70:166
 
 With the server running and the client applications installed, we can verify we have a basic level of security configured from within P4Admin by going to the "Configurables" tab at the top.
 
-\[p4adminconfig]
+![](https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1764557751/p4adminconfig.png)
 
 Perforce's server admin documentation could be a little more robust here. They assume the administrator has enough background to get started with their recommendations and commands in their docs but don't acknowledge that you could do it all from within P4Admin (*way easier*).
 
