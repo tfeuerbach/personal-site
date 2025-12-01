@@ -26,6 +26,8 @@ The R220 had a single 120GB SSD and 16GB of DDR3 RAM when I first unracked it, s
 
 For the server install, **I wasn't able to set up an LVM on a single SSD in the installer while keeping `/boot/efi/` and `/boot/` on their own partitions outside the LVM**. Because of this, I installed Ubuntu Server 24.04 normally with the goal of setting up the LVM and migrating my SWAP and root partitions later. I left my 1TB SSD untouched as there wasn't a need to install anything on it in the beginning. After Ubuntu was installed, I proceeded to set up the LVMs.
 
+If you don't care about this part you can skip to the [Housekeeping Before Installing P4 Server](##HousekeepingBeforeInstallingP4Server) section for the installation of P4 itself.
+
 - - -
 
 ## Creating the Logical Volumes
@@ -360,9 +362,3 @@ If you're set up is similar to mine (using Tailscale) then there's certain consi
 P4 attempts to detect if files should be stored as text or binary data, and sets all files to read-only until you check them out. Setting up a typemap tells Perforce what to do for the various files it encounters. For example, in our case (working in Unreal w/ Blueprints), we want to make sure we enable file-locking for .uasset files so that we don't have any conflicts we can't easily reconcile. A typemap can also let you limit the number of versions of a file stored on the server, which saves server space.
 
 For my installation I just used the ["Universal Game Engine Typemap"](https://gist.github.com/jase-perf/3f6328fb66427802090f458775e481df). It's definitely overkill as it has lines for Unity and Godot but that's not really a big deal. On the server, `p4 typemap` opens up the default typemap in vim. Simply copy in your typemap settings and save it like you would any other document and you should see `Typemap saved.`
-
-- - -
-
-# [Creating a Stream Depot](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-depot.html)
-
-Depots are essentially the same thing as a repository if you're familiar with `git`. Generally it's best practice to have one project per depot.
