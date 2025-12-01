@@ -360,3 +360,9 @@ If you're set up is similar to mine (using Tailscale) then there's certain consi
 P4 attempts to detect if files should be stored as text or binary data, and sets all files to read-only until you check them out. Setting up a typemap tells Perforce what to do for the various files it encounters. For example, in our case (working in Unreal w/ Blueprints), we want to make sure we enable file-locking for .uasset files so that we don't have any conflicts we can't easily reconcile. A typemap can also let you limit the number of versions of a file stored on the server, which saves server space.
 
 For my installation I just used the ["Universal Game Engine Typemap"](https://gist.github.com/jase-perf/3f6328fb66427802090f458775e481df). It's definitely overkill as it has lines for Unity and Godot but that's not really a big deal. On the server, `p4 typemap` opens up the default typemap in vim. Simply copy in your typemap settings and save it like you would any other document and you should see `Typemap saved.`
+
+- - -
+
+# [Creating a Stream Depot](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-depot.html)
+
+Depots are essentially the same thing as a repository if you're familiar with `git`. Generally it's best practice to have one project per depot.
