@@ -1,5 +1,13 @@
 ---
 title: Loading Your Satisfactory Server Save Remotely on the Interactive Map - Linux
+description: Auto-load Satisfactory dedicated server saves to the Interactive
+  Map. A step-by-step guide to serving files via HTTPS with Nginx.
+excerpt: Want to view your live Satisfactory 1.1 dedicated server map without
+  manually uploading save files every time? This guide details how to directly
+  connect your server to the Satisfactory Calculator Interactive Map. I walk
+  through the complete home lab setup using Nginx, Let's Encrypt, and DuckDNS to
+  securely serve your saves over HTTPS, covering the essential CORS headers and
+  specific file permission fixes for Pterodactyl and Docker environments.
 date: 2025-10-05T20:31:00.000-04:00
 ---
 I spun up a Satisfactory 1.1 server on my Home Lab with some buddies and we wanted a better way to see our factory and the map. The [Satisfactory Calculator Interactive Map](https://satisfactory-calculator.com/en/interactive-map) is perfect for this and it supports remote save loading—you give it a URL to your save file and it loads directly.
