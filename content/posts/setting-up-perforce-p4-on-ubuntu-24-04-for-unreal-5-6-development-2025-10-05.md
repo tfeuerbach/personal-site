@@ -408,3 +408,11 @@ Perforce uses these things called "depots" which act the same as a `git` reposit
 <div style={{width: '100%', display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
   <iframe width="640" height="360" src="https://www.youtube.com/embed/qB6mpOy8ZUs?si=xMeazjJGo83P8iI1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
+
+- - -
+
+# [Creating a Workspace](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-workspace.html)
+
+<div style={{width: '100%', display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
+  <iframe width="640" height="360" src="https://storage.app.guidde.com/v0/b/guidde-production.appspot.com/o/uploads%2Fi3MvDXktF5QoPHIvO794j1oQqrH2%2F3DxoDejMKKGzTDJqns3E8o.mp4?alt=media&token=c507fb24-ee73-4db6-a63f-f108024e2394" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
