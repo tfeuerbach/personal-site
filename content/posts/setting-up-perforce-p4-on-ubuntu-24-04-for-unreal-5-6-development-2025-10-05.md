@@ -369,7 +369,7 @@ For my installation I just used the ["Universal Game Engine Typemap"](https://gi
 
 # [Creating a Stream Depot](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-depot.html)
 
-Perforce uses these things called "depots" which act the same as a `git` repository if you're familiar. The conventional way to work with depots is by giving each project its own depot. The process for this is super simple when using the P4Admin application we downloaded before so I'm going to just use the video they provide on their own guide here.
+Perforce uses these things called "depots" which act the same as a `git` repository if you're familiar. The conventional way to work with depots is by giving each project its own depot. For this next section, the process is fairly simple and straightforward when using the P4Admin application downloaded earlier. With that said, I'm going to just embed the relevant videos for the upcoming steps they provide as they get the job done.
 
 <div style="width: 100%; display: flex; justify-content: center; margin: 20px 0;">
   <iframe 
@@ -380,4 +380,23 @@ Perforce uses these things called "depots" which act the same as a `git` reposit
     allow="fullscreen" 
     style="max-width: 100%; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
   </iframe>
+</div>
+
+## [Creating a Mainline Stream](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-stream.html)
+
+<div style="width: 100%; display: flex; justify-content: center; margin: 20px 0;">
+  <iframe 
+    src="https://storage.app.guidde.com/v0/b/guidde-production.appspot.com/o/uploads%2Fi3MvDXktF5QoPHIvO794j1oQqrH2%2FpT71GaGCLCVzN4Lfuok9xa.mp4?alt=media&token=8d334f4f-7826-4b01-948b-ec437fff6dcf" 
+    width="640" 
+    height="360" 
+    frameborder="0" 
+    allow="fullscreen" 
+    style="max-width: 100%; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+  </iframe>
+</div>
+
+**NOTE:** See the following video for additional information on streams in general:
+
+<div style="width: 100%; display: flex; justify-content: center; margin: 20px 0;">
+  <iframe width="640" height="360" src="https://www.youtube.com/embed/qB6mpOy8ZUs?si=xMeazjJGo83P8iI1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
