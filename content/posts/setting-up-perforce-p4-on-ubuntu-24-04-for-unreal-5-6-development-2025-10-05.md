@@ -303,6 +303,8 @@ P4 super-user password:
 
 Once this finishes your server will be up and running and it is now possible to connect using the client tools. 
 
+**NOTE:** One other thing I did here was `p4 configure set server.depot.root=/p4/depot`. This set my default depot directory to /p4/depot/ which is the 1TB volume I created earlier.
+
 - - -
 
 # Installing P4V and Other Client Tools
