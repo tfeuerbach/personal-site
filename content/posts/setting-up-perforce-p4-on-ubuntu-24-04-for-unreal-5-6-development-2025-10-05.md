@@ -47,7 +47,7 @@ sdb      8:16   0 953.9G  0 disk
 
 For the LV, I'm taking the unallocated space and creating another partition `/dev/sda5/` using `fdisk`:
 
-**\[fdisk1 image]**
+![](https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1764557737/fdisk1.png)
 
 Once the partition was created, I just had to change the partition type to a 'Linux LVM'. This can be done by inputting `t` when you're in the `fdisk` utility, selecting the partition number (in my case it was 5), and then typing 'Linux LVM' and pressing ENTER.
 
@@ -310,10 +310,12 @@ Once this finishes your server will be up and running and it is now possible to 
 # Installing P4V and Other Client Tools
 
 My guys and I are going to be running on Windows machines so that is the OS I'm installing the tools for. On the [P4V downloads page](https://portal.perforce.com/s/downloads?product=Helix%20Visual%20Client%20%28P4V%29), I select the Windows family and download the .exe installer (*p4vinst64.exe*). Run the installer and download all available tools.
-    \[p4vinstaller image]
+
+![](https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1764557751/p4vinstaller.png)
 
 It will then ask for your server's IP address, the name of your super-user, and then the text editing application you'd like to default to. In my case, since I'm on the same network as my server, I can use the server's network IP that I get from `ip a` OR I can use the Tailscale assigned IP.
-\[p4vinstaller2 image]
+
+![](https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1764557751/p4vinstaller2.png)
 
 For my buddies, they'll want to input my machine's Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.
 
@@ -353,7 +355,7 @@ For now, you can assume all modifications are done from within the "Configurable
 
 **Note:** The values in this table are not necessarily the "default" values when P4 installs. For example, `dm.user.setinitialpasswd` defaults to `1`.
 
-\[setinitpasswd.png]
+![](https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1764557750/setinitpass.png)
 
 If you're set up is similar to mine (using Tailscale) then there's certain considerations you can safely "ignore" provided you know who is on your Tailnet and you trust them. With that said, I went ahead and matched my configuration to the values in the above table anyway. There's a lot of documentation on securing the server alone but the above table provides a good starting point.
 
