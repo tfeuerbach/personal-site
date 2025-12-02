@@ -311,11 +311,17 @@ Once this finishes your server will be up and running and it is now possible to 
 
 My guys and I are going to be running on Windows machines so that is the OS I'm installing the tools for. On the [P4V downloads page](https://portal.perforce.com/s/downloads?product=Helix%20Visual%20Client%20%28P4V%29), I select the Windows family and download the .exe installer (*p4vinst64.exe*). Run the installer and download all available tools.
 
-![](https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1764557751/p4vinstaller.png)
+
+<div style={{ textAlign: 'center' }}>
+  <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1758304297/p4vinstaller.png" alt="no-ssl" width="60%" />
+</div>
 
 It will then ask for your server's IP address, the name of your super-user, and then the text editing application you'd like to default to. In my case, since I'm on the same network as my server, I can use the server's network IP that I get from `ip a` OR I can use the Tailscale assigned IP.
 
-![](https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1764557751/p4vinstaller2.png)
+
+<div style={{ textAlign: 'center' }}>
+  <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1758304297/p4vinstaller2.png" alt="no-ssl" width="60%" />
+</div>
 
 For my buddies, they'll want to input my machine's Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.
 
