@@ -362,3 +362,20 @@ If you're set up is similar to mine (using Tailscale) then there's certain consi
 P4 attempts to detect if files should be stored as text or binary data, and sets all files to read-only until you check them out. Setting up a typemap tells Perforce what to do for the various files it encounters. For example, in our case (working in Unreal w/ Blueprints), we want to make sure we enable file-locking for .uasset files so that we don't have any conflicts we can't easily reconcile. A typemap can also let you limit the number of versions of a file stored on the server, which saves server space.
 
 For my installation I just used the ["Universal Game Engine Typemap"](https://gist.github.com/jase-perf/3f6328fb66427802090f458775e481df). It's definitely overkill as it has lines for Unity and Godot but that's not really a big deal. On the server, `p4 typemap` opens up the default typemap in vim. Simply copy in your typemap settings and save it like you would any other document and you should see `Typemap saved.`
+
+- - -
+
+# [Creating a Stream Depot](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-depot.html)
+
+Perforce uses these things called "depots" which act the same as a `git` repository if you're familiar. The conventional way to work with depots is by giving each project its own depot. The process for this is super simple when using the P4Admin application we downloaded before so I'm going to just use the video they provide on their own guide here.
+
+<div style="width: 100%; display: flex; justify-content: center; margin: 20px 0;">
+  <iframe 
+    src="https://storage.app.guidde.com/v0/b/guidde-production.appspot.com/o/uploads%2Fi3MvDXktF5QoPHIvO794j1oQqrH2%2F8NXBQdxCrodv3Ta2NDAExM.mp4?alt=media&token=eb4bd803-cb55-4560-9595-f4dac9941d3a" 
+    width="640" 
+    height="360" 
+    frameborder="0" 
+    allow="fullscreen" 
+    style="max-width: 100%; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+  </iframe>
+</div>
