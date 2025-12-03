@@ -377,7 +377,7 @@ For my installation I just used the ["Universal Game Engine Typemap"](https://gi
 
 # [Creating a Stream Depot](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-depot.html)
 
-Perforce uses these things called "depots" which act the same as a `git` repository if you're familiar. The conventional way to work with depots is by giving each project its own depot. For this next section, the process is fairly simple and straightforward when using the P4Admin application downloaded earlier. With that said, I'm going to just embed the relevant videos for the upcoming steps they provide as they get the job done.
+Perforce uses "depots" which act the same as a `git` repository if you're familiar. The conventional way to work with depots is by giving each project its own depot. For this next section, the process is fairly simple and straightforward when using the P4Admin application downloaded earlier. With that said, I'm going to just embed the relevant videos for the upcoming steps they provide as they get the job done.
 
 <div style={{width: '100%', display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
   <video 
