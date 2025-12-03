@@ -406,7 +406,7 @@ Perforce uses these things called "depots" which act the same as a `git` reposit
 **NOTE:** See the following video for additional information on streams in general:
 
 <div style={{width: '100%', display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
-  <iframe width="640" height="360" src="https://www.youtube.com/embed/qB6mpOy8ZUs?si=xMeazjJGo83P8iI1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <iframe width="640" height="360" src="https://www.youtube.com/embed/qB6mpOy8ZUs?si=xMeazjJGo83P8iI1" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
 - - -
@@ -414,5 +414,40 @@ Perforce uses these things called "depots" which act the same as a `git` reposit
 # [Creating a Workspace](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-workspace.html)
 
 <div style={{width: '100%', display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
-  <iframe width="640" height="360" src="https://storage.app.guidde.com/v0/b/guidde-production.appspot.com/o/uploads%2Fi3MvDXktF5QoPHIvO794j1oQqrH2%2F3DxoDejMKKGzTDJqns3E8o.mp4?alt=media&token=c507fb24-ee73-4db6-a63f-f108024e2394" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <iframe width="640" height="360" src="https://storage.app.guidde.com/v0/b/guidde-production.appspot.com/o/uploads%2Fi3MvDXktF5QoPHIvO794j1oQqrH2%2F3DxoDejMKKGzTDJqns3E8o.mp4?alt=media&token=c507fb24-ee73-4db6-a63f-f108024e2394" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
+
+
+Now that the server is configured and the typemap is set, we need a workspace to actually start moving files around. In P4V, right-click the stream you just created in the **Stream Graph** view and select **New Workspace**.
+
+This brings up the Workspace dialog where we need to configure a few specifics:
+
+1.  **Workspace Name:** You want this to be unique to the user, the machine, and the project. A solid naming convention to stick to is `username_computer_project`. For example: `tfeuerbach_GamingRig_StellarPlaza`.
+2.  **Workspace Root:** This is the physical location on your drive where the files will live. I usually create a new, empty folder with the same name as the workspace to keep things 1:1. By default, P4 tries to put this in your home directory, so hit **Browse** if you want it on a specific drive (like that dedicated game dev SSD).
+3.  **Stream:** Make sure this points to the stream you selected in the graph.
+
+### Configuring File Options
+
+Before hitting OK, we need to tweak how the workspace handles files. Head to the **Advanced** tab. Under **File Options**, there are a few settings here that are considered "best practice" for game development workflows.
+
+Specifically, you'll want to enable **Modtime**, **Rmdir**, and **Revert unchanged files**.
+
+Here is a quick breakdown of what these options do and why we're setting them:
+
+| File Option | Description |
+| :--- | :--- |
+| **Allwrite** | Leaves all files writable. **Avoid this** unless you have a specific reason, as it bypasses the "checkout" workflow and can lead to you overwriting changes or causing sync failures. |
+| **Clobber** | Overwrites writable files in your workspace when you get new revisions. |
+| **Compress** | Compresses files during transfer. Good for slow connections, but if you're on a LAN like me, it's not strictly necessary. |
+| **Modtime** | **Enable this.** It sets the file modification time to match when it was submitted, rather than when you synced it. This makes build tools and caching systems (like Unreal's) much happier. |
+| **Rmdir** | **Enable this.** It automatically cleans up (deletes) empty folders in your workspace locally if the files inside them are removed from the server. Keeps things tidy. |
+| **Altsync** | Generally used to preserve metadata; you can usually leave this unchecked for standard setups. |
+| **Revert unchanged files** | **Enable this** in the "On Submit" field. If you check out a file but don't actually change it, the server will automatically revert it when you submit. This keeps your changelists clean and prevents false positives in the history. |
+
+Once those are set:
+
+1.  Check **Switch to new workspace immediately** so P4V swaps you over right away.
+2.  Check **Automatically get all revisions** (Populate). This will trigger the initial sync and pull down all the latest files to your machine.
+3.  Click **OK**.
+
+You should now see your new workspace in the dropdown on the **Workspace** tab in the left pane. If you ever need to manage multiple workspaces (say, if you're testing on a laptop and a desktop), you can view all of them by going to **View > Workspaces**.
