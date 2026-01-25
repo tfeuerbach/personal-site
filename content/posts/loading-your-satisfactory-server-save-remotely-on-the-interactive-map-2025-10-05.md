@@ -293,7 +293,7 @@ sudo chmod o+x /var/lib/pterodactyl
 sudo chmod o+x /var/lib/pterodactyl/volumes
 
 # Replace with your actual server UUID
-sudo chmod o+x -R /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566
+sudo chmod -R o+x /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566
 
 # Make the save files readable
 sudo chmod o+r /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566/.config/Epic/FactoryGame/Saved/SaveGames/server/*.sav
@@ -312,11 +312,7 @@ If the server runs as your current user and files are in your home:
 ```bash
 chmod 755 ~/.config
 chmod 755 ~/.config/Epic
-chmod 755 ~/.config/Epic/FactoryGame
-chmod 755 ~/.config/Epic/FactoryGame/Saved
-chmod 755 ~/.config/Epic/FactoryGame/Saved/SaveGames
-chmod 755 ~/.config/Epic/FactoryGame/Saved/SaveGames/server
-chmod 644 ~/.config/Epic/FactoryGame/Saved/SaveGames/server/*.sav
+chmod -R 755 ~/.config/Epic/FactoryGame
 ```
 
 ### For Dedicated Server (running as different user, like 'steam'):
@@ -331,10 +327,7 @@ sudo chmod o+x /home/$SERVER_USER
 # Make all directories in the path accessible
 sudo chmod o+x /home/$SERVER_USER/.config
 sudo chmod o+x /home/$SERVER_USER/.config/Epic
-sudo chmod o+x /home/$SERVER_USER/.config/Epic/FactoryGame
-sudo chmod o+x /home/$SERVER_USER/.config/Epic/FactoryGame/Saved
-sudo chmod o+x /home/$SERVER_USER/.config/Epic/FactoryGame/Saved/SaveGames
-sudo chmod o+x /home/$SERVER_USER/.config/Epic/FactoryGame/Saved/SaveGames/server
+sudo chmod -R o+x /home/$SERVER_USER/.config/Epic/FactoryGame
 
 # Make save files readable
 sudo chmod o+r /home/$SERVER_USER/.config/Epic/FactoryGame/Saved/SaveGames/server/*.sav
