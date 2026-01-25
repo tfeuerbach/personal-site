@@ -293,13 +293,7 @@ sudo chmod o+x /var/lib/pterodactyl
 sudo chmod o+x /var/lib/pterodactyl/volumes
 
 # Replace with your actual server UUID
-sudo chmod o+x /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566
-sudo chmod o+x /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566/.config
-sudo chmod o+x /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566/.config/Epic
-sudo chmod o+x /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566/.config/Epic/FactoryGame
-sudo chmod o+x /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566/.config/Epic/FactoryGame/Saved
-sudo chmod o+x /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566/.config/Epic/FactoryGame/Saved/SaveGames
-sudo chmod o+x /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566/.config/Epic/FactoryGame/Saved/SaveGames/server
+sudo chmod o+x -R /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566
 
 # Make the save files readable
 sudo chmod o+r /var/lib/pterodactyl/volumes/16917711-dd16-45c7-ac23-5cc75136a566/.config/Epic/FactoryGame/Saved/SaveGames/server/*.sav
