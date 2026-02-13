@@ -1,0 +1,458 @@
+---
+title: Setting up Perforce P4 on Ubuntu 24.04 for Unreal 5.6 Development
+date: 2025-10-05T18:22:00.000-04:00
+---
+# Perforce as Version Control for Unreal
+
+A couple friends and I decided to collaborate on a game in Unreal, using a combination of [Multi-User Editing](https://dev.epicgames.com/documentation/en-us/unreal-engine/getting-started-with-multi-user-editing-in-unreal-engine) and a version control system. Having only worked on Unreal projects from Udemy lessons, I was unsure how to approach multi-person development. I initially considered using Git, but quickly realized it would be a problem. Unreal projects involve much more than just code; we'd need to share 3D assets, C++ files, [C++ Blueprints](https://dev.epicgames.com/documentation/en-us/unreal-engine/cpp-and-blueprints-example), images, audio, and other file types.
+
+Initial research showed that some people have had success with Git LFS, but it's generally considered a less-than-ideal approach due to a few quirks. All signs pointed to [Perforce P4](https://www.perforce.com/products/helix-core) (formerly Helix Core), which is the industry standard for game development. There's plenty of information out there that covers the differences between these two version control systems for game development, so I'll avoid going too deep into that for the sake of keeping this post focused.
+
+- - -
+
+## On-Prem vs. Cloud
+
+<div style={{ textAlign: 'center' }}>
+  <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1757824949/homelab-r220.png" alt="homelab-r220" />
+</div>
+
+I've got a homelab in my office with an R220 I was looking to repurpose after using it to host an AzerothCore server for me and a buddy. While hosting in the cloud is a great option, I didn't want to rack up a bill for something that may or may not end up being a fully realized game. Storage space can also get pricey if we start to accrue a lot of assets. To ensure we could all connect to the server in my house without me having to expose it to the internet, I planned on putting us all on the same Tailscale Network ([Tailnet](https://tailscale.com/kb/1136/tailnet)).
+
+- - -
+
+## Getting the Server Ready
+
+The R220 had a single 120GB SSD and 16GB of DDR3 RAM when I first unracked it, so I decided to throw in an additional 1TB as I knew we'd need more space than that. My plan was to use a Logical Volume Manager (LVM) to allow me to add more down the road for the Perforce database and depot(s). Best practice with Perforce is to keep the database on a separate drive than the depot(s). In my case, the database partition (P4ROOT) would exist on the 120GB SSD logical volume, and the depot(s) would sit on the 1TB SSD logical volume.
+
+For the server install, **I wasn't able to set up an LVM on a single SSD in the installer while keeping `/boot/efi/` and `/boot/` on their own partitions outside the LVM**. Because of this, I installed Ubuntu Server 24.04 normally with the goal of setting up the LVM and migrating my SWAP and root partitions later. I left my 1TB SSD untouched as there wasn't a need to install anything on it in the beginning. After Ubuntu was installed, I proceeded to set up the LVMs.
+
+If you don't care about this part you can skip to the [Housekeeping Before Installing P4 Server](##HousekeepingBeforeInstallingP4Server) section for the installation of P4 itself.
+
+- - -
+
+## Creating the Logical Volumes
+
+To do this you need to boot using some form of bootable media. For most people, this will be a USB with your preferred OS. For this guide, I'm assuming that anyone who's reading it knows how to get that set up. If not, check out [Rufus](https://rufus.ie/en/).
+
+Here's a snippet of my `lsblk` output:
+
+```
+sda      8:0    0 119.2G  0 disk
+├─sda1   8:1    0     1G  0 part   <--/boot/efi
+├─sda2   8:2    0     8G  0 part   <--SWAP
+├─sda3   8:3    0    20G  0 part   <--/
+└─sda4   8:4    0     1G  0 part   <--/boot
+sdb      8:16   0 953.9G  0 disk
+```
+
+For the LV, I'm taking the unallocated space and creating another partition `/dev/sda5/` using `fdisk`:
+
+![](https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1764557737/fdisk1.png)
+
+Once the partition was created, I just had to change the partition type to a 'Linux LVM'. This can be done by inputting `t` when you're in the `fdisk` utility, selecting the partition number (in my case it was 5), and then typing 'Linux LVM' and pressing ENTER.
+
+```
+Created a new partition 5 of type 'Linux filesystem' and of size 89.2 GiB.
+
+Command (m for help): t
+Partition number (1-5, default 5): 5
+Partition type or alias (type L to list all): Linux LVM
+
+Changed type of partition 'Linux filesystem' to 'Linux LVM'.
+```
+
+The changes made above are then written out by inputting `w`.
+
+From there, I then made the Physical Volume (lowest layer of LVM abstraction and designates the partition for use by the LVM) followed by the Logical Volumes for my partitions I had made during install:
+
+```
+sudo pvcreate /dev/sda5
+sudo vgcreate vg_os /dev/sda5
+
+sudo lvcreate --name root_lv --size 20G vg_os
+sudo lvcreate --name swap_lv --size 8G vg_os
+sudo lvcreate --name p4root_lv --extents 100%FREE vg_os
+```
+
+Now I can take my other SSD (1TB) and go through the same process, but we only need a single LV here since it's all for the depot(s). One thing to note is that I formatted the volume as XFS, which is a great filesystem for larger files and parallel I/O.
+
+```
+sudo pvcreate /dev/sdb
+sudo vgcreate vg_depot /dev/sdb
+
+sudo lvcreate --name depot_lv --extents 100%FREE vg_depot
+
+sudo mkfs.xfs /dev/vg_depot/depot_lv
+```
+
+- - -
+
+## Copying Partition Data to the Logical Volumes
+
+At this point we're ready to move the system data and partitions into their respective LV's. For my root partition `/dev/sda3/`, the filesystem needs to be ext4 and we need to make a temporary mount point for the old and the new. Once we've done that, it's a quick `rsync`.
+
+```
+sudo mkfs.ext4 /dev/vg_os/root_lv
+
+mkdir /mnt/old_root /mnt/new_root
+sudo mount /dev/sda3 /mnt/old_root
+sudo mount /dev/vg_os/root_lv /mnt/new_root
+
+sudo rsync -axHAX --exclude=/boot/* /mnt/old_root/ /mnt/new_root/
+```
+
+- - -
+
+## Updating the System for LVM Booting
+
+To get the system to boot and use the LVMs that I've set up, I need to `chroot` into the new filesystem and update the bootloader. The steps for doing that consist of mounting the virtual filesystems from the live environment to `/mnt/new_root/`, mounting the boot partitions, `chroot` into the new root filesystem, and then update the `/etc/fstab`.
+
+```
+sudo mount --bind /dev /mnt/new_root/dev
+sudo mount --bind /sys /mnt/new_root/sys
+sudo mount --bind /proc /mnt/new_root/proc
+sudo mount --bind /run /mnt/new_root/run
+
+sudo mount /dev/sda4 /mnt/new_root/boot
+sudo mount /dev/sda1 /mnt/new_root/boot/efi
+
+sudo chroot /mnt/new_root
+```
+
+At this point, I'm now in my `chroot` environment and see `root@ubuntu-server:/#` rather than `ubuntu-server@ubuntu-server:~$` and I now can make changes to `/etc/fstab`.
+
+### Old /etc/fstab:
+
+```
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+/dev/disk/by-uuid/df397092-bb7b-4b08-b351-1b33f520dae9 none swap sw 0 0
+# / was on /dev/sda3 during curtin installation
+/dev/disk/by-uuid/6f613d07-1d3c-48f8-860c-0d133821f636 / ext4 defaults 0 1
+# /boot was on /dev/sda4 during curtin installation
+/dev/disk/by-uuid/1c71978f-5874-4661-8e18-31386a98e7df /boot ext4 defaults 0 1
+# /boot/efi was on /dev/sda1 during curtin installation
+/dev/disk/by-uuid/2186-E48E /boot/efi vfat defaults 0 1
+```
+
+### Updated /etc/fstab:
+
+```
+# EFI and Boot partitions
+UUID=2186-E48E /boot/efi vfat defaults 0 1
+UUID=1c71978f-5874-4661-8e18-31386a98e7df /boot ext4 defaults 0 1
+
+# New LVM Logical Volumes for OS and Perforce metadata
+/dev/mapper/vg_os-root_lv / ext4 noatime,defaults 0 1
+/dev/mapper/vg_os-swap_lv none swap sw 0 0
+/dev/mapper/vg_os-p4root_lv /p4/P4ROOT ext4 noatime,defaults 0 2
+
+# New LVM Logical Volume for Perforce depots
+/dev/mapper/vg_depot-depot_lv /p4/depot xfs noatime,defaults 0 2
+```
+
+- - -
+
+## Final Steps: Update `initramfs` and GRUB, Reboot
+
+**Update the *initramfs:***
+
+```
+update-initramfs -u -k all
+```
+
+**Note:** You can ignore the message that `systemd` still uses the old version of your fstab. `systemctl daemon-reload` isn't necessary here as the change to the `fstab` will be picked up when we reboot anyway.
+
+**Update GRUB config:**
+
+```
+update-grub
+```
+
+**Reinstall GRUB to the master boot record:**
+
+```
+grub-install /dev/sda
+```
+
+**Exit `chroot`, unmount the filesystems, reboot:**
+
+```
+exit
+sudo umount -R /mnt/new_root
+reboot
+```
+
+**Note:**  After you run `grub-install` and reboot, your server might freak out a little and drop you into an emergency shell. Don't worry, this is normal and can happen when performing a migration to LVMs. It's a harmless race condition that can happen when the system attempts to mount the LVs before the LVM daemon has fully initialized. If this happens, just reboot a second time. Your machine will have the LVM info cached and boot up correctly.
+
+- - -
+
+## Housekeeping Before Installing P4 Server
+
+After I verified the system could boot properly and that the partition migrations to the LVM were done properly, I booted back into the live USB and used `fdisk` to delete my unused root and SWAP partitions which freed up about 30GB. I then added that to `p4root_lv` using the same steps as above (create partition, change filesystem, create physical volume, logical volume, then add to existing LV).
+
+### Configuring Kernel Networking Params
+
+Another thing that will benefit performance is adjusting the network params to handle high-volume data transfers. Increasing the buffer size allows the server to handle large `p4 sync` or `submit` operations. To do this, edit `/etc/sysctl.conf` (in my case I'm going to make a file called `99-perforce.conf` and place that in `/etc/sysctl.d/` for organization purposes):
+
+```
+# Perforce-related TCP/IP tunings
+#
+# The maximum size of the receive and send buffers for all network connections.
+# This sets the hard limit for how much memory the kernel can use for network buffers.
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+
+# This line sets the minimum, default, and maximum memory allocated for TCP sockets system-wide.
+# The three values are: [min_value, default_value, max_value].
+net.ipv4.tcp_mem = 1528512 2038016 8388608
+
+# These lines set the minimum, default, and maximum TCP receive buffer sizes (in bytes).
+# This is a range for the kernel to use for each individual TCP connection.
+net.ipv4.tcp_rmem = 4096 87380 16777216
+
+# These lines set the minimum, default, and maximum TCP send buffer sizes (in bytes).
+# This provides a range for the kernel to use for each individual TCP connection.
+net.ipv4.tcp_wmem = 4096 65536 16777216
+```
+
+I then apply the changes, `sudo sysctl -p /etc/sysctl.d/99-perforce.conf`.
+
+- - -
+
+# Installing Perforce P4 Server 2025.1
+
+Perforce documentation on installing P4 on Linux can be found [here](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/Home-p4sag.html). The following is my attempt at supplementing their documentation with an anecdotal guide that I would have liked to have when doing this myself. For certain steps, I'll be brief as there are some areas in the documentation that don't require any further explanation and *I'm making the assumption that readers have experience working with Ubuntu or any other Debian-based distro*.
+
+**TL;DR - This is not a total replacement for Perforce's documentation/guide. Supplement this post with their instructions.**
+
+## Configuring the Repo
+
+If you're unfamiliar with adding external/non-default Linux repo's to your distribution, I highly encourage you to read [this guide](https://documentation.ubuntu.com/server/explanation/software/third-party-repository-usage/) instead of blindly following these instructions. Understanding how and why we do the following is **crucial** to being a responsible Linux admin, even if you're just cosplaying SysAdmin at home.
+
+1. Download and verify Perforce's public key
+
+   * ```
+     wget https://package.perforce.com/perforce.pubkey
+
+     gpg -n --import --import-options import-show perforce.pubkey
+
+     gpg -n --import --import-options import-show perforce.pubkey \
+        | grep -q "E58131C0AEA7B082C6DC4C937123CB760FF18869" \
+        && echo "true"
+     ```
+2. Add the key to the system keyring and create a file for the repo. Then run: `sudo apt update`
+
+   * ```
+     wget -qO - https://package.perforce.com/perforce.pubkey \
+        | gpg --dearmor \
+        | sudo tee /usr/share/keyrings/perforce.gpg
+     ```
+   * `sudo vi /etc/apt/sources.list.d/perforce.list` to create and edit the repo file with this line: `deb [signed-by=/usr/share/keyrings/perforce.gpg] https://package.perforce.com/apt/ubuntu noble release`
+
+## [Downloading and Installing P4 Server](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/install.linux.packages.install.html)
+
+When we run `sudo apt install p4-server` we're downloading P4 Server (p4d) and P4 CLI Client (p4) along with their dependencies like `p4dctl`, `p4-server-base`, `p4-cli-base`, etc.
+
+Once that installs it'll be located in `/opt/perforce/` and from there you just need to do a `sudo chmod +x /opt/perforce/sbin/configure-*` to ensure the scripts are executable and then run `sudo /opt/perforce/sbin/configure-p4d.sh`.
+
+**Note:** For fields where there's no visible response from me, that's because I'm taking the default value that exists within the `[brackets]`.
+
+```
+tfeuerbach@perforce-nexus:~$ sudo /opt/perforce/sbin/configure-p4d.sh
+
+Summary of arguments passed:
+
+Service-name        [(not specified)]
+P4PORT              [(not specified)]
+P4ROOT              [(not specified)]
+Super-user          [(not specified)]
+Super-user passwd   [(not specified)]
+Unicode mode        [(not specified)]
+Case-sensitive      [(not specified)]
+
+For a list of other options, type Ctrl-C to exit, and then run:
+$ sudo /opt/perforce/sbin/configure-p4d.sh --help
+
+
+You have entered interactive configuration for p4d. This script
+will ask a series of questions, and use your answers to configure p4d
+for first time use. Options passed in from the command line or
+automatically discovered in the environment are presented as defaults.
+You may press enter to accept them, or enter an alternative.
+
+Please provide the following details about your desired P4 environment:
+
+
+P4 Service name [master]: dalaran
+Service dalaran not found. Creating...
+P4 Server root (P4ROOT) [/opt/perforce/servers/dalaran]: /p4/P4ROOT
+{P4} Server unicode-mode (y/n) [n]: n
+P4 Server case-sensitive (y/n) [y]: y
+P4 Server address (P4PORT) [ssl:1666]:
+P4 super-user login [super]:
+P4 super-user password:
+Re-enter password.
+P4 super-user password:
+```
+
+Once this finishes your server will be up and running and it is now possible to connect using the client tools. 
+
+**NOTE:** One other thing I did here was `p4 configure set server.depot.root=/p4/depot`. This set my default depot directory to /p4/depot/ which is the 1TB volume I created earlier.
+
+- - -
+
+# Installing P4V and Other Client Tools
+
+My guys and I are going to be running on Windows machines so that is the OS I'm installing the tools for. On the [P4V downloads page](https://portal.perforce.com/s/downloads?product=Helix%20Visual%20Client%20%28P4V%29), I select the Windows family and download the .exe installer (*p4vinst64.exe*). Run the installer and download all available tools.
+
+
+<div style={{ textAlign: 'center' }}>
+  <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1758304297/p4vinstaller.png" alt="no-ssl" width="60%" />
+</div>
+
+It will then ask for your server's IP address, the name of your super-user, and then the text editing application you'd like to default to. In my case, since I'm on the same network as my server, I can use the server's network IP that I get from `ip a` OR I can use the Tailscale assigned IP.
+
+
+<div style={{ textAlign: 'center' }}>
+  <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1758304297/p4vinstaller2.png" alt="no-ssl" width="60%" />
+</div>
+
+For my buddies, they'll want to input my machine's Tailscale IP since we're all connected via the same Tailnet. As for my text editing application, I went with Notepad++ but you could use Sublime or whatever your preferred text editor is.
+
+One thing to note here when connecting is that you must provide your server IP as such due to the options configured during install: `ssl:ipaddress:port`.
+
+Below is what you would see if you do not follow that format (though if you do not require SSL on install, this is not the case).
+
+<div style={{ textAlign: 'center' }}>
+  <img src="https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1758304297/OpenConnectionNoSSL.png" alt="no-ssl" width="60%" />
+</div>
+
+To make the above connection work, the server address is `ssl:100.103.240.70:1666`.
+
+- - -
+
+# [Securing the Server](https://help.perforce.com/helix-core/server-apps/p4sag/current/Content/P4SAG/chapter.security.html)
+
+With the server running and the client applications installed, we can verify we have a basic level of security configured from within P4Admin by going to the "Configurables" tab at the top.
+
+![](https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1764557751/p4adminconfig.png)
+
+Perforce's server admin documentation could be a little more robust here. They assume the administrator has enough background to get started with their recommendations and commands in their docs but don't acknowledge that you could do it all from within P4Admin (*way easier*).
+
+For now, you can assume all modifications are done from within the "Configurables" tab in P4Admin. The table below can be found in the documentation and should be considered the **minimum** values for a secure P4 Server.
+
+| Purpose                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Configurable               | Value         |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | ------------- |
+| Require ticket-based authentication. To help protect systems and data, specify a value of at least 4. This level of protection is particularly important in multi-server and replicated environments. The setting helps to ensure that only authenticated service users can connect to the server. The setting also requires server specs for all replicas. For successful configuration at various levels, carefully consider the details in the Server behavior column at Server security levels. | `security`                 | `4` or higher |
+| Ensure that only users with the super access level, and whose password is already set, can set the initial password for other users. All users can reset their own password after logging in with an initial password set by a super user.                                                                                                                                                                                                                                                          | `dm.user.setinitialpasswd` | `0`           |
+| Ensure that only a user with the super access level can create a user, and that the super user does so by explicitly running the `p4 user -f username` command.                                                                                                                                                                                                                                                                                                                                     | `dm.user.noautocreate`     | `2`           |
+| Force new users that have been created by a super user to reset their passwords.                                                                                                                                                                                                                                                                                                                                                                                                                    | `dm.user.resetpassword`    | `1`           |
+| Hide sensitive information from unauthorized users of `p4 info`.                                                                                                                                                                                                                                                                                                                                                                                                                                    | `dm.info.hide`             | `1`           |
+| Hide user details from unauthenticated users.                                                                                                                                                                                                                                                                                                                                                                                                                                                       | `run.users.authorize`      | `1`           |
+| If authentication fails because of an incorrect username, hide the reason for the failure.                                                                                                                                                                                                                                                                                                                                                                                                          | `dm.user.hideinvalid`      | `1`           |
+| Hide information in key/value pairs used in scripts from those who lack admin access. One use case is hiding P4 Code Review storage from regular users.                                                                                                                                                                                                                                                                                                                                             | `dm.keys.hide`             | `2`           |
+| Prevent a server from being used as a P4AUTH server without deliberate configuration.                                                                                                                                                                                                                                                                                                                                                                                                               | `server.rolechecks`        | `1`           |
+
+**Note:** The values in this table are not necessarily the "default" values when P4 installs. For example, `dm.user.setinitialpasswd` defaults to `1`.
+
+![](https://res.cloudinary.com/tfeuerbach-blog/image/upload/v1764557750/setinitpass.png)
+
+If you're set up is similar to mine (using Tailscale) then there's certain considerations you can safely "ignore" provided you know who is on your Tailnet and you trust them. With that said, I went ahead and matched my configuration to the values in the above table anyway. There's a lot of documentation on securing the server alone but the above table provides a good starting point.
+
+- - -
+
+# [Configuring Typemap Settings](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-typemap.html)
+
+P4 attempts to detect if files should be stored as text or binary data, and sets all files to read-only until you check them out. Setting up a typemap tells Perforce what to do for the various files it encounters. For example, in our case (working in Unreal w/ Blueprints), we want to make sure we enable file-locking for .uasset files so that we don't have any conflicts we can't easily reconcile. A typemap can also let you limit the number of versions of a file stored on the server, which saves server space.
+
+For my installation I just used the ["Universal Game Engine Typemap"](https://gist.github.com/jase-perf/3f6328fb66427802090f458775e481df). It's definitely overkill as it has lines for Unity and Godot but that's not really a big deal. On the server, `p4 typemap` opens up the default typemap in vim. Simply copy in your typemap settings and save it like you would any other document and you should see `Typemap saved.`
+
+- - -
+
+# [Creating a Stream Depot](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-depot.html)
+
+Perforce uses "depots" which act the same as a `git` repository if you're familiar. The conventional way to work with depots is by giving each project its own depot. For this next section, the process is fairly simple and straightforward when using the P4Admin application downloaded earlier. With that said, I'm going to just embed the relevant videos for the upcoming steps they provide as they get the job done.
+
+<div style={{width: '100%', display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
+  <video 
+    controls
+    src="https://storage.app.guidde.com/v0/b/guidde-production.appspot.com/o/uploads%2Fi3MvDXktF5QoPHIvO794j1oQqrH2%2F8NXBQdxCrodv3Ta2NDAExM.mp4?alt=media&token=eb4bd803-cb55-4560-9595-f4dac9941d3a" 
+    width="640" 
+    height="360" 
+    style={{maxWidth: '100%', border: '1px solid #e5e7eb', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'}}>
+  </video>
+</div>
+
+## [Creating a Mainline Stream](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-stream.html)
+
+
+<div style={{width: '100%', display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
+  <video 
+    controls
+    src="https://storage.app.guidde.com/v0/b/guidde-production.appspot.com/o/uploads%2Fi3MvDXktF5QoPHIvO794j1oQqrH2%2FpT71GaGCLCVzN4Lfuok9xa.mp4?alt=media&token=8d334f4f-7826-4b01-948b-ec437fff6dcf" 
+    width="640" 
+    height="360" 
+    style={{maxWidth: '100%', border: '1px solid #e5e7eb', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'}}>
+  </video>
+</div>
+
+**NOTE:** See the following video for additional information on streams in general:
+
+<div style={{width: '100%', display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
+  <iframe width="640" height="360" src="https://www.youtube.com/embed/qB6mpOy8ZUs?si=xMeazjJGo83P8iI1&autoplay=0" title="YouTube video player" frameborder="0" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+- - -
+
+# [Creating a Workspace](https://help.perforce.com/helix-core/quickstart/current/Content/quickstart/admin-create-workspace.html)
+
+<div style={{width: '100%', display: 'flex', justifyContent: 'center', margin: '20px 0'}}>
+  <video 
+    controls
+    width="640" 
+    height="360" 
+    src="https://storage.app.guidde.com/v0/b/guidde-production.appspot.com/o/uploads%2Fi3MvDXktF5QoPHIvO794j1oQqrH2%2F3DxoDejMKKGzTDJqns3E8o.mp4?alt=media&token=c507fb24-ee73-4db6-a63f-f108024e2394" 
+    style={{maxWidth: '100%', border: '1px solid #e5e7eb', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'}}>
+  </video>
+</div>
+
+
+Now that the server is configured and the typemap is set, we need a workspace to actually start moving files around. In P4V, right-click the stream you just created in the **Stream Graph** view and select **New Workspace**.
+
+This brings up the Workspace dialog where we need to configure a few specifics:
+
+1.  **Workspace Name:** You want this to be unique to the user, the machine, and the project. A solid naming convention to stick to is `username_computer_project`. For example: `tfeuerbach_GamingRig_StellarPlaza`.
+2.  **Workspace Root:** This is the physical location on your drive where the files will live. I usually create a new, empty folder with the same name as the workspace to keep things 1:1. By default, P4 tries to put this in your home directory, so hit **Browse** if you want it on a specific drive (like that dedicated game dev SSD).
+3.  **Stream:** Make sure this points to the stream you selected in the graph.
+
+### Configuring File Options
+
+Before hitting OK, we need to tweak how the workspace handles files. Head to the **Advanced** tab. Under **File Options**, there are a few settings here that are considered "best practice" for game development workflows.
+
+Specifically, you'll want to enable **Modtime**, **Rmdir**, and **Revert unchanged files**.
+
+Here is a quick breakdown of what these options do and why we're setting them:
+
+| File Option | Description |
+| :--- | :--- |
+| **Allwrite** | Leaves all files writable. **Avoid this** unless you have a specific reason, as it bypasses the "checkout" workflow and can lead to you overwriting changes or causing sync failures. |
+| **Clobber** | Overwrites writable files in your workspace when you get new revisions. |
+| **Compress** | Compresses files during transfer. Good for slow connections, but if you're on a LAN like me, it's not strictly necessary. |
+| **Modtime** | **Enable this.** It sets the file modification time to match when it was submitted, rather than when you synced it. This makes build tools and caching systems (like Unreal's) much happier. |
+| **Rmdir** | **Enable this.** It automatically cleans up (deletes) empty folders in your workspace locally if the files inside them are removed from the server. Keeps things tidy. |
+| **Altsync** | Generally used to preserve metadata; you can usually leave this unchecked for standard setups. |
+| **Revert unchanged files** | **Enable this** in the "On Submit" field. If you check out a file but don't actually change it, the server will automatically revert it when you submit. This keeps your changelists clean and prevents false positives in the history. |
+
+Once those are set:
+
+1.  Check **Switch to new workspace immediately** so P4V swaps you over right away.
+2.  Check **Automatically get all revisions** (Populate). This will trigger the initial sync and pull down all the latest files to your machine.
+3.  Click **OK**.
+
+You should now see your new workspace in the dropdown on the **Workspace** tab in the left pane. If you ever need to manage multiple workspaces (say, if you're testing on a laptop and a desktop), you can view all of them by going to **View > Workspaces**.
