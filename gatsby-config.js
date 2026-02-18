@@ -14,11 +14,12 @@ module.exports = {
     siteUrl: `https://tfeuerbach.dev`,
     siteDescription: `Thomas Feuerbach's personal website for programming, projects, and interesting things.`,
     siteImage: `/banner.jpg`,
-    siteLanguage: `en`, // Added from new config
+    siteLanguage: `en`,
     author: `Thomas Feuerbach`,
   },
-  trailingSlash: `always`, // Merged this from the new config
+  trailingSlash: `always`,
   plugins: [
+    `gatsby-plugin-image`,
     {
       resolve: `gatsby-plugin-decap-cms`,
       options: {
@@ -26,10 +27,18 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `projects`,
+        path: `${__dirname}/content/projects`,
+      },
+    },
+    {
       resolve: `@lekoarts/gatsby-theme-minimal-blog`,
       options: {
         navigation: [
           { title: `Posts`, slug: `/blog` },
+          { title: `Projects`, slug: `/projects` },
           { title: `Resume`, slug: `/resume` },
           { title: `About`, slug: `/about` },
         ],
@@ -37,6 +46,7 @@ module.exports = {
           { name: `LinkedIn`, url: `https://linkedin.com/in/tfeuerbach` },
           { name: `YouTube`, url: `https://youtube.com/@tfeuerbach` },
 	  { name: `Photography`, url: `https://photos.tfeuerbach.dev/`},
+          { name: `RSS`, url: `/rss.xml` },
         ],
       },
     },
@@ -47,6 +57,14 @@ module.exports = {
     {
       resolve: `gatsby-plugin-sitemap`,
       options: { output: `/` },
+    },
+    {
+      resolve: `gatsby-plugin-robots-txt`,
+      options: {
+        host: `https://tfeuerbach.dev`,
+        sitemap: `https://tfeuerbach.dev/sitemap-index.xml`,
+        policy: [{ userAgent: `*`, allow: `/` }],
+      },
     },
     {
       resolve: `gatsby-plugin-manifest`,
@@ -113,7 +131,7 @@ module.exports = {
               }
             }`,
             output: `rss.xml`,
-            title: `Minimal Blog - @lekoarts/gatsby-theme-minimal-blog`,
+            title: `tfeuerbach.dev`,
           },
         ],
       },

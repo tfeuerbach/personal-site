@@ -3,7 +3,11 @@ backend:
   repo: tfeuerbach/personal-site
   branch: main
 
-media_folder: "images/uploads"
+media_library:
+  name: cloudinary
+  config:
+    cloud_name: tfeuerbach-blog
+    api_key: "955514553763115"
 
 publish_mode: editorial_workflow
 
@@ -15,7 +19,20 @@ collections:
     slug: "{{slug}}-{{year}}-{{month}}-{{day}}"
     fields:
       - {label: "Title", name: "title", widget: "string"}
+      - {label: "Meta Description", name: "description", widget: "text", required: false, hint: "SEO description (150-160 characters). Shows in Google search results."}
+      - {label: "Excerpt", name: "excerpt", widget: "text", required: false, hint: "Short summary for post previews and RSS feed (1-2 sentences)."}
       - {label: "Publish Date", name: "date", widget: "datetime"}
       - {label: "Image", name: "image", required: false, widget: "image"}
       - {label: "Body", name: "body", widget: "markdown"}
       - {label: "Tags", name: "tags", widget: "list"}
+  - name: "projects"
+    label: "Projects"
+    folder: "content/projects"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Description", name: "description", widget: "string"}
+      - {label: "Link", name: "link", widget: "string"}
+      - {label: "Image", name: "image", required: false, widget: "image"}

@@ -1,35 +1,18 @@
-exports.createPages = async ({ graphql, actions }) => {
-  const { createPage } = actions
-  const blogPostTemplate = require.resolve(`./src/templates/blog-post.tsx`)
-
-  const result = await graphql(`
-    query {
-      allMarkdownRemark {
-        edges {
-          node {
-            id
-            html
-            frontmatter {
-              title
-              description
-              tags
-            }
-          }
-        }
-      }
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions
+  const typeDefs = `
+    type Mdx implements Node {
+      frontmatter: MdxFrontmatter
     }
-  `)
-
-  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
-    createPage({
-      path: `/blog/${node.id}`,
-      component: blogPostTemplate,
-      context: {
-        title: node.frontmatter.title,
-        description: node.frontmatter.description,
-        html: node.html,
-        tags: node.frontmatter.tags,
-      },
-    })
-  })
+    type MdxFrontmatter {
+      image: String
+    }
+    type MarkdownRemark implements Node {
+      frontmatter: MarkdownRemarkFrontmatter
+    }
+    type MarkdownRemarkFrontmatter {
+      image_external: String
+    }
+  `
+  createTypes(typeDefs)
 }

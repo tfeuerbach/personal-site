@@ -1,5 +1,10 @@
+import EggDot from "../components/egg-dot";
+
 <Text
-  children={`Welcome to my website.`}
+  as="span"
+  children={<>
+    Welcome to my website<EggDot />
+  </>}
   sx={{ fontSize: [3, 4, 5], fontWeight: `bold`, color: `heading` }}
 />
-This is my personal website for projects and things I find interesting.
+This is my personal website for projects and stuff I find interesting.
