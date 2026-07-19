@@ -1,0 +1,639 @@
+/* Scoped Miata build sheet — light/dark via .miata-build--dark */
+
+.miata-build {
+  --bg: #f7f3ed;
+  --surface: #f4f0ea;
+  --surface-2: #ebe4db;
+  --hairline: #d4cbc0;
+  --hairline-soft: #e5ddd2;
+  --copper: #bd5a34;
+  --copper-bright: #c45a2e;
+  --brass: #9a7a28;
+  --text: #1c1814;
+  --text-dim: #5c544c;
+  --text-faint: #8a8178;
+  --green: #4f6b3e;
+  --ink-on-accent: #f7f1e8;
+  --plate-inset: rgba(28, 24, 20, 0.06);
+  --hover-row: rgba(189, 90, 52, 0.06);
+  --glow-a: rgba(189, 90, 52, 0.08);
+  --glow-b: rgba(201, 164, 69, 0.06);
+  --tip-bg: #1c1814;
+  --tip-text: #f7f1e8;
+
+  box-sizing: border-box;
+  color: var(--text);
+  font-family: "Inter", system-ui, sans-serif;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse at top left, var(--glow-a), transparent 55%),
+    radial-gradient(ellipse at bottom right, var(--glow-b), transparent 50%);
+  border-radius: 8px;
+  padding: 20px 16px 8px;
+  margin: 0 -8px;
+}
+
+.miata-build *,
+.miata-build *::before,
+.miata-build *::after {
+  box-sizing: border-box;
+}
+
+.miata-build--dark {
+  --bg: #131110;
+  --surface: #1b1815;
+  --surface-2: #221e1a;
+  --hairline: #38322c;
+  --hairline-soft: #2a251f;
+  --copper: #bd5a34;
+  --copper-bright: #e07a4d;
+  --brass: #c9a445;
+  --text: #ece5da;
+  --text-dim: #a89e91;
+  --text-faint: #6f665b;
+  --green: #7e9b6a;
+  --ink-on-accent: #131110;
+  --plate-inset: rgba(236, 229, 218, 0.06);
+  --hover-row: rgba(189, 90, 52, 0.045);
+  --glow-a: rgba(189, 90, 52, 0.07);
+  --glow-b: rgba(201, 164, 69, 0.05);
+  --tip-bg: #ece5da;
+  --tip-text: #131110;
+}
+
+.miata-build .sheet {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 0 48px;
+}
+
+/* ---------- HEADER / SPEC PLATE ---------- */
+.miata-build .plate {
+  border: 1px solid var(--hairline);
+  background: linear-gradient(155deg, var(--surface) 0%, var(--surface-2) 100%);
+  border-radius: 6px;
+  padding: 28px 30px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.miata-build .plate::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid var(--plate-inset);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.miata-build .plate-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.miata-build .eyebrow {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--copper-bright);
+}
+
+.miata-build .plate h1 {
+  font-family: "Oswald", sans-serif;
+  font-weight: 700;
+  font-size: 44px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  margin-top: 8px;
+  color: var(--text);
+}
+
+.miata-build .plate h2 {
+  font-family: "Oswald", sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: 8px;
+}
+
+.miata-build .disclaimer {
+  margin-top: 12px;
+  max-width: 34em;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10.5px;
+  line-height: 1.55;
+  color: var(--text-faint);
+  letter-spacing: 0.01em;
+}
+
+.miata-build .vin-box {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--text-faint);
+  text-align: right;
+  line-height: 1.7;
+  letter-spacing: 0.03em;
+  border-left: 1px solid var(--hairline);
+  padding-left: 16px;
+  white-space: nowrap;
+}
+
+.miata-build .vin-box b {
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.miata-build .stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  margin-top: 26px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.miata-build .stat {
+  background: var(--surface);
+  padding: 14px 16px;
+}
+
+.miata-build .stat .num {
+  font-family: "Oswald", sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--brass);
+}
+
+.miata-build .stat .lbl {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-top: 4px;
+}
+
+.miata-build .stat-total {
+  background: linear-gradient(155deg, rgba(189, 90, 52, 0.16), rgba(201, 164, 69, 0.1));
+}
+
+.miata-build .stat-total .num {
+  color: var(--copper-bright);
+  font-size: 24px;
+}
+
+.miata-build .cost-bar-wrap {
+  margin-top: 14px;
+}
+
+.miata-build .cost-bar {
+  display: flex;
+  width: 100%;
+  height: 22px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--hairline);
+}
+
+.miata-build .seg {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.miata-build .seg span {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9.5px;
+  color: var(--ink-on-accent);
+  white-space: nowrap;
+  padding-left: 8px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.miata-build .seg-purchase {
+  background: var(--text-dim);
+}
+
+.miata-build .seg-parts {
+  background: var(--copper);
+}
+
+.miata-build .seg-labor {
+  background: var(--brass);
+}
+
+.miata-build .cost-bar-legend {
+  display: flex;
+  gap: 18px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+.miata-build .cost-bar-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.miata-build .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ---------- DYNO GRAPHIC ---------- */
+.miata-build .dyno-wrap {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--hairline);
+}
+
+.miata-build .dyno-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.miata-build .dyno-head h3 {
+  font-family: "Oswald", sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.miata-build .legend {
+  display: flex;
+  gap: 16px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--text-faint);
+}
+
+.miata-build .legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.miata-build .swatch {
+  width: 14px;
+  height: 2px;
+  display: inline-block;
+}
+
+.miata-build .foot {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9.5px;
+  color: var(--text-faint);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ---------- SECTIONS ---------- */
+.miata-build .section {
+  margin-top: 34px;
+}
+
+.miata-build .sec-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.miata-build .sec-tag {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--ink-on-accent);
+  background: var(--copper);
+  padding: 4px 9px;
+  border-radius: 3px;
+  letter-spacing: 0.08em;
+}
+
+.miata-build .sec-head h3 {
+  font-family: "Oswald", sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+
+.miata-build .sec-sub {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10.5px;
+  color: var(--text-faint);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.miata-build .sec-icon {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  color: var(--text-dim);
+}
+
+.miata-build .panel {
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  overflow: visible;
+  background: var(--surface);
+}
+
+.miata-build .illus-row {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--hairline);
+  background: var(--surface-2);
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+}
+
+.miata-build .illus {
+  flex: 1;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.miata-build .illus svg {
+  flex: none;
+  color: var(--copper-bright);
+}
+
+.miata-build .illus-cap {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9.5px;
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
+.miata-build .illus-cap b {
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.miata-build table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.miata-build thead th {
+  text-align: left;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--hairline);
+  font-weight: 500;
+}
+
+.miata-build thead th.num,
+.miata-build td.num {
+  text-align: right;
+}
+
+.miata-build tbody tr {
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+.miata-build tbody tr:last-child {
+  border-bottom: none;
+}
+
+.miata-build tbody tr:hover {
+  background: var(--hover-row);
+}
+
+.miata-build td {
+  padding: 11px 16px;
+  vertical-align: top;
+  font-size: 13.5px;
+}
+
+.miata-build td.part {
+  font-weight: 500;
+  color: var(--text);
+  width: 26%;
+  position: relative;
+}
+
+.miata-build td.part--linked {
+  cursor: help;
+}
+
+.miata-build td.part--linked .part-label {
+  border-bottom: 1px dashed var(--copper);
+}
+
+.miata-build td.part--linked .part-tip {
+  position: absolute;
+  left: 16px;
+  top: calc(100% - 2px);
+  z-index: 30;
+  display: none;
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 4px;
+  background: var(--tip-bg);
+  color: var(--tip-text);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+  pointer-events: auto;
+}
+
+.miata-build td.part--linked .part-tip::before {
+  content: "";
+  position: absolute;
+  left: 16px;
+  bottom: 100%;
+  border: 6px solid transparent;
+  border-bottom-color: var(--tip-bg);
+}
+
+.miata-build td.part--linked:hover .part-tip,
+.miata-build td.part--linked:focus-within .part-tip {
+  display: block;
+}
+
+.miata-build td.part--linked .part-tip a {
+  color: var(--tip-text);
+  text-decoration: none;
+}
+
+.miata-build td.part--linked .part-tip a:hover {
+  color: var(--copper-bright);
+  text-decoration: underline;
+}
+
+.miata-build td.date {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  width: 11%;
+}
+
+.miata-build td.cost {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  color: var(--brass);
+  white-space: nowrap;
+  width: 9%;
+}
+
+.miata-build td.note {
+  color: var(--text-dim);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.miata-build .gain {
+  color: var(--green);
+  font-weight: 600;
+}
+
+.miata-build .gain-tag {
+  display: inline-block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--ink-on-accent);
+  background: var(--brass);
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+
+.miata-build .sec-foot {
+  padding: 12px 16px;
+  background: var(--surface-2);
+  border-top: 1px solid var(--hairline);
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.miata-build .sec-foot b {
+  color: var(--copper-bright);
+}
+
+.miata-build .page-foot {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--text-faint);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 640px) {
+  .miata-build .plate h1 {
+    font-size: 32px;
+  }
+
+  .miata-build .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .miata-build .vin-box {
+    text-align: left;
+    border-left: none;
+    border-top: 1px solid var(--hairline);
+    padding-left: 0;
+    padding-top: 10px;
+    margin-top: 8px;
+  }
+
+  .miata-build .illus-row {
+    flex-direction: column;
+  }
+
+  .miata-build td.note {
+    display: none;
+  }
+
+  .miata-build thead th:last-child {
+    display: none;
+  }
+
+  .miata-build .sec-sub {
+    display: none;
+  }
+}
+
+@media print {
+  .miata-build .sheet {
+    max-width: 100%;
+    padding: 26px;
+  }
+
+  .miata-build tr,
+  .miata-build thead {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .miata-build .sec-head {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .miata-build .sec-head,
+  .miata-build .illus-row {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .miata-build .panel {
+    break-inside: auto;
+  }
+
+  .miata-build .section {
+    break-inside: auto;
+  }
+
+  .miata-build .plate {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .miata-build .stats,
+  .miata-build .cost-bar-wrap,
+  .miata-build .dyno-wrap {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
