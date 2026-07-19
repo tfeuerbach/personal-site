@@ -39,6 +39,7 @@ module.exports = {
         navigation: [
           { title: `Posts`, slug: `/blog` },
           { title: `Projects`, slug: `/projects` },
+          { title: `Miata Build`, slug: `/miata-build` },
           { title: `Resume`, slug: `/resume` },
           { title: `About`, slug: `/about` },
         ],
