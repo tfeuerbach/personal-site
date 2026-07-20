@@ -41,7 +41,7 @@ const ProjectCard = ({ project }) => {
             height: '100%',
             objectFit: 'cover',
             transition: 'filter 0.3s ease',
-            filter: isHovered ? 'brightness(0.4)' : 'brightness(0.85)',
+            filter: isHovered ? 'brightness(0.35)' : 'brightness(0.75)',
           }}
         />
       ) : (
@@ -53,10 +53,22 @@ const ProjectCard = ({ project }) => {
             height: '100%',
             objectFit: 'cover',
             transition: 'filter 0.3s ease',
-            filter: isHovered ? 'brightness(0.4)' : 'brightness(0.85)',
+            filter: isHovered ? 'brightness(0.35)' : 'brightness(0.75)',
           }}
         />
       )}
+      {/* Always-on scrim so titles stay readable on dark or busy screenshots */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          background: isHovered
+            ? 'rgba(0, 0, 0, 0.55)'
+            : 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 42%, rgba(0,0,0,0.15) 100%)',
+          transition: 'background 0.3s ease',
+        }}
+      />
       <Box
         sx={{
           position: 'absolute',
@@ -70,13 +82,14 @@ const ProjectCard = ({ project }) => {
           alignItems: 'center',
           p: 3,
           textAlign: 'center',
-          color: 'white',
+          color: '#fff',
           opacity: isHovered ? 1 : 0,
           transition: 'opacity 0.3s ease',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
         }}
       >
-        <Text sx={{ fontSize: 2 }}>{project.description}</Text>
+        <Text sx={{ fontSize: 2, color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.45)' }}>
+          {project.description}
+        </Text>
       </Box>
       <Box
         sx={{
@@ -87,15 +100,26 @@ const ProjectCard = ({ project }) => {
           bottom: 0,
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: 'flex-end',
           p: 3,
+          pb: 4,
           textAlign: 'center',
-          color: 'white',
           opacity: isHovered ? 0 : 1,
           transition: 'opacity 0.3s ease',
         }}
       >
-        <Heading as="h3" sx={{ fontSize: 4 }}>{project.title}</Heading>
+        <Heading
+          as="h3"
+          sx={{
+            fontSize: [3, 4],
+            color: '#fff !important',
+            fontWeight: 700,
+            letterSpacing: '0.01em',
+            textShadow: '0 1px 2px rgba(0,0,0,0.65), 0 2px 12px rgba(0,0,0,0.45)',
+          }}
+        >
+          {project.title}
+        </Heading>
       </Box>
     </a>
   )
